@@ -38,7 +38,7 @@ If you followed all the steps above and you are getting errors, ask Chad Geppett
 
 ---
 
-# Project Setup
+## Project Setup
 1. Clone the Repository:
 
 First, clone the project repository to your local machine using Git. Open your terminal, navigate to the directory where you want to store the project, and run:
@@ -49,7 +49,7 @@ git close https://github.com/BrayanCSUS/LowkeyVital
 
 *or*
 
-Use my prefered method. GitHub Copilot. 
+Use my prefered method. ***GitHub Copilot***. 
 
 2. Install Dependencies:
 
@@ -81,17 +81,17 @@ This command will start the application and make it accessible in your web brows
 
 Open your web browser and go to the address provided in the terminal output (usually http://localhost:3000). You should now see the SacState Room Reservation application running!
 
-# Contributing
-- *Commit Frequently*: Commit your changes regularly with clear and concise messages.
-- *Branching*: Create a new branch for each feature or bug fix you're working on.
-- *Push Your Changes*: Once you're done with a feature or bug fix, push your branch to the remote repository.
-- *Pull Requests*: Submit a pull request to merge your changes into the main branch.
+## Contributing
+- ***Commit Frequently***: Commit your changes regularly with clear and concise messages.
+- ***Branching***: Create a new branch for each feature or bug fix you're working on.
+- ***Push Your Changes***: Once you're done with a feature or bug fix, push your branch to the remote repository.
+- ***Pull Requests***: Submit a pull request to merge your changes into the main branch.
 
-# Troubleshooting
+## Troubleshooting
 If you encounter any issues during the setup process, here are a few things to try:
 
-- Check the Terminal Output: Carefully read the error messages in the terminal for clues about what went wrong.
-- Google the Error Message: Search the web for the error message to find potential solutions.
-- Ask for Help: Don't hesitate to ask for help from other team members or experienced developers.
+- ***Check the Terminal Output***: Carefully read the error messages in the terminal for clues about what went wrong.
+- ***Google the Error Message***: Search the web for the error message to find potential solutions.
+- ***Ask for Help***: Don't hesitate to ask for help from other team members or experienced developers.
 
 Good luck, and happy coding!
