@@ -45,7 +45,7 @@ If you followed all the steps above and you are getting errors, ask Chad Geppett
 First, clone the project repository to your local machine using Git. Open your terminal, navigate to the directory where you want to store the project, and run:
 
 ```zsh
-git close https://github.com/BrayanCSUS/LowkeyVital
+git clone https://github.com/BrayanCSUS/LowkeyVital
 ```
 
 _or_
