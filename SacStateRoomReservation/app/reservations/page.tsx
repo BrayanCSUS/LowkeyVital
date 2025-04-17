@@ -101,7 +101,7 @@ export default function ReservationsPage() {
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-[#00563F]">
+            <Button variant="outline" className=" text-[#00563F] hover:bg-white hover:text-[#00563F]">
               Sign In
             </Button>
             <Button className="bg-[#C4B581] text-[#00563F] hover:bg-[#d8c99a]">Sign Up</Button>
