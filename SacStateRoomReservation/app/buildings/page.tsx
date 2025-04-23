@@ -1,9 +1,11 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Building, Clock, Filter, MapPin, Search } from "lucide-react"
+import {useState} from "react"
 import Link from "next/link"
 
 // Sample data for buildings
@@ -83,6 +85,9 @@ const buildings = [
 ]
 
 export default function BuildingsPage() {
+  const [searchTerm, setSearchTerm] = useState("")
+  const filteredBuildings = buildings.filter((building) =>
+    building.name.toLowerCase().includes(searchTerm.toLowerCase()))
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-10 border-b bg-[#00563F] text-white">
@@ -124,7 +129,7 @@ export default function BuildingsPage() {
             <div className="flex items-center gap-2 w-full md:w-auto">
               <div className="relative flex-1 md:w-64">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input placeholder="Search buildings..." className="pl-10" />
+                <Input placeholder="Search buildings..." className="pl-10" value= {searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
               </div>
               <Button variant="outline" size="icon">
                 <Filter className="h-4 w-4" />
@@ -142,7 +147,7 @@ export default function BuildingsPage() {
           </Tabs>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {buildings.map((building) => (
+            {filteredBuildings.map((building) => (
               <Card key={building.id} className="overflow-hidden">
                 <img
                   src={building.image || "/placeholder.svg"}
