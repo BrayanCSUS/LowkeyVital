@@ -1,0 +1,26 @@
+.popup-content {
+    width: 400px; /* Set your desired width */
+    max-width: 100%; /* Ensure it doesn't exceed the viewport */
+    color: white; /* Change text color to green */
+    background-color: #043927; /* Sacramento State University green */
+    padding: 20px; /* Add some padding for better appearance */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    outline: none; /* Remove any outline */
+    border: none; /* Remove any border if applicable */
+    box-shadow: none;
+    font-size: 20px;
+}
+
+.modal {
+    position: relative; /* Make the modal a positioned element */
+}
+
+.close-button {
+    position: absolute; /* Position it absolutely within the modal */
+    top: 5px; /* Distance from the top */
+    right: 5px; /* Distance from the right */
+    border: none; /* Remove default button border */
+    color: white; /* Change color to match your design */
+    font-size: 14px; /* Adjust font size */
+    cursor: pointer; /* Change cursor to pointer */
+}

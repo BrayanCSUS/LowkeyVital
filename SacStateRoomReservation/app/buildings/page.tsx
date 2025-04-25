@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Building, Clock, Filter, MapPin, Search } from "lucide-react"
 import {useState} from "react"
 import Link from "next/link"
+import Sign_In_Button from "../login/sign_in_button"
 
 // Sample data for buildings
 const buildings = [
@@ -87,8 +88,7 @@ const buildings = [
 export default function BuildingsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const filteredBuildings = buildings.filter((building) =>
-    building.name.toLowerCase().includes(searchTerm.toLowerCase()))
-  return (
+    building.name.toLowerCase().includes(searchTerm.toLowerCase()))  return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-10 border-b bg-[#00563F] text-white">
         <div className="container flex h-16 items-center justify-between px-4">
@@ -111,10 +111,7 @@ export default function BuildingsPage() {
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-            <Button variant="outline" className=" text-[#00563F] hover:bg-white hover:text-[#00563F]">
-              Sign In
-            </Button>
-            <Button className="bg-[#C4B581] text-[#00563F] hover:bg-[#d8c99a]">Sign Up</Button>
+            <Sign_In_Button />
           </div>
         </div>
       </header>
