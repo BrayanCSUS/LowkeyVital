@@ -88,7 +88,7 @@ const buildings = [
 export default function BuildingsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const filteredBuildings = buildings.filter((building) =>
-    building.name.toLowerCase().includes(searchTerm.toLowerCase()))  return (
+    building.name.toLowerCase().includes(searchTerm.toLowerCase()));  return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-10 border-b bg-[#00563F] text-white">
         <div className="container flex h-16 items-center justify-between px-4">
@@ -208,5 +208,5 @@ export default function BuildingsPage() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

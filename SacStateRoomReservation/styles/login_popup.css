@@ -24,3 +24,9 @@
     font-size: 14px;
     cursor: pointer;
 }
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 12px; /* Adjust the font size as needed */
+}
