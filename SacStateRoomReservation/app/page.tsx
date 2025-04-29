@@ -1,3 +1,5 @@
+"use client"
+import { useState } from "react"
 import Link from "next/link"
 import { Building, Clock, MapPin, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -7,9 +9,61 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import RoomMap from "@/components/room-map"
 import NearbyRooms from "@/components/nearby-rooms"
 import RecentReservations from "@/components/recent-reservations"
+// Sample building options for search suggestions
+interface Building {
+  id: number
+  name: string
+}
+const buildings: Building[] = [
+  { id: 1, name: "University Library" },
+  { id: 2, name: "Mendocino Hall" },
+  { id: 3, name: "Riverside Hall" },
+  { id: 4, name: "University Union" },
+  { id: 5, name: "Sequoia Hall" },
+  { id: 6, name: "Placer Hall" },
+]
+
+// Sample rooms for demonstration purposes.
+// In your real app each building might have its own room list.
+const sampleRooms = [
+  { id: 1, roomNumber: "101", name: "Room 101" },
+  { id: 2, roomNumber: "102", name: "Room 102" },
+  { id: 3, roomNumber: "103", name: "Room 103" },
+]
 
 export default function HomePage() {
-  return (
+    // New state for search, selected building, and whether to show rooms list.
+    const [searchTerm, setSearchTerm] = useState("")
+    const [selectedBuilding, setSelectedBuilding] =  useState<Building | null>(null)
+    const [showRooms, setShowRooms] = useState(false)
+  
+    // Filter building suggestions based on typed text.
+    const filteredBuildings = buildings.filter((b) =>
+      b.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  
+    // Handle selecting a building suggestion.
+    const handleSelectBuilding = (building: Building) => {
+      setSelectedBuilding(building)
+      setSearchTerm(building.name)
+    }
+  
+    // Handle click of the "Find Nearby Rooms" button.
+    const handleFindRooms = () => {
+      if (selectedBuilding) {
+        setShowRooms(true)
+      } else {
+        // Optionally, you could show an error message if no building is selected.
+        alert("Please select a building from the suggestions.")
+      }
+    }
+    const sampleRooms = [
+      { id: 1, roomNumber: "101", name: "Room 101" },
+      { id: 2, roomNumber: "102", name: "Room 102" },
+      { id: 3, roomNumber: "103", name: "Room 103" },
+    ]
+  
+return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-10 border-b bg-[#00563F] text-white">
         <div className="container flex h-16 items-center justify-between px-4">
@@ -49,19 +103,68 @@ export default function HomePage() {
               <p className="mt-4 text-lg">
                 Quickly locate and reserve empty classrooms based on your current location on campus.
               </p>
-              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 relative">
                 <div className="relative w-full max-w-md">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="search"
-                    placeholder="Search by building or room number..."
+                    placeholder="Search by building..."
                     className="pl-10 bg-white text-black"
+                    value={searchTerm}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value)
+                      setSelectedBuilding(null) // Reset selected building when typing
+                      setShowRooms(false) // Hide rooms list on new search
+                    }}
                   />
+                  {/* Dropdown list of building suggestions */}
+                  {searchTerm.length > 0 && !selectedBuilding && (
+                    <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded border bg-white text-black shadow">
+                      {filteredBuildings.length > 0 ? (
+                        filteredBuildings.map((b) => (
+                          <li
+                            key={b.id}
+                            className="cursor-pointer px-4 py-2 hover:bg-gray-200"
+                            onClick={() => handleSelectBuilding(b)}
+                          >
+                            {b.name}
+                          </li>
+                        ))
+                      ) : (
+                        <li className="px-4 py-2">No matches found.</li>
+                      )}
+                    </ul>
+                  )}
                 </div>
-                <Button className="bg-[#C4B581] text-[#00563F] hover:bg-[#d8c99a] w-full sm:w-auto">
+                <Button
+                  className="bg-[#C4B581] text-[#00563F] hover:bg-[#d8c99a] w-full sm:w-auto"
+                  onClick={handleFindRooms}
+                >
                   Find Nearby Rooms
                 </Button>
               </div>
+              {/* Scrollable rooms list based on selected building */}
+              {showRooms && selectedBuilding && (
+                <div className="mt-4 max-h-60 overflow-y-auto rounded border bg-white p-4 text-black shadow">
+                  <h2 className="mb-2 text-lg font-bold">
+                    Rooms in {selectedBuilding.name}
+                  </h2>
+                  {sampleRooms.map((room) => (
+                    <div
+                      key={room.id}
+                      className="flex items-center justify-between border-b py-2 last:border-0"
+                    >
+                      <div>
+                        <p className="font-medium">{room.name}</p>
+                        <p className="text-xs text-gray-600">Room {room.roomNumber}</p>
+                      </div>
+                      <Button variant="outline" size="sm">
+                        View Details
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </section>
