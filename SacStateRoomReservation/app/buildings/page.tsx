@@ -20,7 +20,7 @@ const buildings = [
     availableRooms: 12,
     hours: "7:00 AM - 10:00 PM",
     features: ["Study Rooms", "Computer Labs", "Quiet Zones"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/library.jpg?height=200&width=300",
   },
   {
     id: 2,
@@ -32,7 +32,7 @@ const buildings = [
     availableRooms: 8,
     hours: "7:00 AM - 9:00 PM",
     features: ["Lecture Halls", "Computer Labs", "Faculty Offices"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/mendocino.jpg?height=200&width=300",
   },
   {
     id: 3,
@@ -44,7 +44,7 @@ const buildings = [
     availableRooms: 15,
     hours: "7:00 AM - 10:00 PM",
     features: ["Engineering Labs", "Lecture Halls", "Study Areas"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/riverside.jpg?height=200&width=300",
   },
   {
     id: 4,
@@ -56,7 +56,7 @@ const buildings = [
     availableRooms: 5,
     hours: "7:00 AM - 11:00 PM",
     features: ["Meeting Rooms", "Event Spaces", "Dining"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/UniversityUnion.jpg?height=200&width=300",
   },
   {
     id: 5,
@@ -68,7 +68,7 @@ const buildings = [
     availableRooms: 10,
     hours: "7:00 AM - 9:00 PM",
     features: ["Classrooms", "Labs", "Study Areas"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/SequoiaHall.jpg?height=200&width=300",
   },
   {
     id: 6,
@@ -80,7 +80,7 @@ const buildings = [
     availableRooms: 7,
     hours: "7:00 AM - 8:00 PM",
     features: ["Lecture Halls", "Research Labs", "Faculty Offices"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/PlacerHall.jpg?height=200&width=300",
   },
 ]
 
