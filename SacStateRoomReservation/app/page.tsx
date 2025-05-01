@@ -11,6 +11,7 @@ import RoomMap from "@/components/room-map"
 import NearbyRooms from "@/components/nearby-rooms"
 import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 
 // Sample building options for search suggestions
 interface Building {
@@ -115,6 +116,7 @@ export default function HomePage() {
     const [searchTerm, setSearchTerm] = useState("")
     const [selectedBuilding, setSelectedBuilding] =  useState<Building | null>(null)
     const [showRooms, setShowRooms] = useState(false)
+    const [showNearbyRooms, setShowNearbyRooms] = useState(false)
   
     // Filter building suggestions based on typed text.
     const filteredBuildings = buildings.filter((b) =>
@@ -341,7 +343,12 @@ return (
                 </CardContent>
                 <CardFooter className="p-4 pt-2 flex justify-between">
                   <Button variant="outline">View Details</Button>
-                  <Button className="bg-[#00563F] hover:bg-[#00563F]/90">Find Rooms</Button>
+                  <Button
+                    className="bg-[#00563F] hover:bg-[#00563F]/90"
+                    onClick={() => setShowNearbyRooms(true)}
+                  >
+                    Find Rooms
+                  </Button>
                 </CardFooter>
               </Card>
             ))}
@@ -392,6 +399,11 @@ return (
           </div>
         </section>
       </main>
+      <Dialog open={showNearbyRooms} onOpenChange={setShowNearbyRooms}>
+        <DialogContent className="max-w-2xl w-full">
+          <NearbyRooms />
+        </DialogContent>
+      </Dialog>
       <footer className="border-t bg-[#00563F] text-white py-6">
         <div className="container px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
