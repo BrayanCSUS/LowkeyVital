@@ -1,0 +1,366 @@
+[
+  {
+    "building": "ALP",
+    "rooms": 17,
+    "name": "Alpine Hall",
+    "id": 1,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "AMD",
+    "rooms": 21,
+    "name": "Amador Hall",
+    "id": 2,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "ARC",
+    "rooms": 12,
+    "name": "Academic Information Resource Center",
+    "id": 3,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "ART",
+    "rooms": 3,
+    "name": "Art Sculpture Lab",
+    "id": 4,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "BNC",
+    "rooms": 2,
+    "name": "Benicia Hall",
+    "id": 5,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "BRH",
+    "rooms": 18,
+    "name": "Brighton Hall",
+    "id": 6,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "CLV",
+    "rooms": 5,
+    "name": "Calaveras Hall",
+    "id": 7,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "CPS",
+    "rooms": 14,
+    "name": "Capistrano Hall",
+    "id": 8,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "DH",
+    "rooms": 13,
+    "name": "Douglass Hall",
+    "id": 9,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "DLN",
+    "rooms": 3,
+    "name": "Del Norte Hall",
+    "id": 10,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "EUR",
+    "rooms": 28,
+    "name": "Eureka Hall",
+    "id": 11,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "FLS",
+    "rooms": 18,
+    "name": "Folsom Hall",
+    "id": 12,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "HMB",
+    "rooms": 6,
+    "name": "Humboldt Hall",
+    "id": 13,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "KDM",
+    "rooms": 15,
+    "name": "Kadema Hall",
+    "id": 14,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "LIB",
+    "rooms": 9,
+    "name": "Library",
+    "id": 15,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "LSN",
+    "rooms": 1,
+    "name": "Lassen Hall",
+    "id": 16,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "MND",
+    "rooms": 31,
+    "name": "Mendocino Hall",
+    "id": 17,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "MRP",
+    "rooms": 23,
+    "name": "Mariposa Hall",
+    "id": 18,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "PLR",
+    "rooms": 3,
+    "name": "Placer Hall",
+    "id": 19,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "RVR",
+    "rooms": 25,
+    "name": "Riverside Hall",
+    "id": 20,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "SHS",
+    "rooms": 11,
+    "name": "Shasta Hall",
+    "id": 21,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "SLN",
+    "rooms": 17,
+    "name": "Solano Hall",
+    "id": 22,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "SQU",
+    "rooms": 38,
+    "name": "Sequoia Hall",
+    "id": 23,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "STH",
+    "rooms": 1,
+    "name": "Studio Theatre",
+    "id": 24,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "TAH",
+    "rooms": 8,
+    "name": "Tahoe Hall",
+    "id": 25,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "TEB",
+    "rooms": 12,
+    "name": "Tschannen Engineering Building",
+    "id": 26,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "TSC",
+    "rooms": 22,
+    "name": "Tschannen Science Complex",
+    "id": 27,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  },
+  {
+    "building": "YSM",
+    "rooms": 10,
+    "name": "Yosemite Hall",
+    "id": 28,
+    "floors": 3,
+    "availableRooms": 0,
+    "hours": "7:00 AM - 10:00 PM",
+    "features": [
+      "Classrooms"
+    ],
+    "image": "/placeholder.jpg?height=200&width=300"
+  }
+]

@@ -12,6 +12,7 @@ import NearbyRooms from "@/components/nearby-rooms"
 import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { useEffect } from "react"
 
 // Sample building options for search suggestions
 interface Building {
@@ -35,93 +36,39 @@ const sampleRooms = [
   { id: 3, roomNumber: "103", name: "Room 103" },
 ]
 
-// Sample data for buildings
-const buildings = [
-  {
-    id: 1,
-    name: "University Library",
-    code: "LIB",
-    type: "academic",
-    floors: 4,
-    rooms: 42,
-    availableRooms: 12,
-    hours: "7:00 AM - 10:00 PM",
-    features: ["Study Rooms", "Computer Labs", "Quiet Zones"],
-    image: "/library.jpg?height=200&width=300",
-  },
-  {
-    id: 2,
-    name: "Mendocino Hall",
-    code: "MND",
-    type: "academic",
-    floors: 3,
-    rooms: 36,
-    availableRooms: 8,
-    hours: "7:00 AM - 9:00 PM",
-    features: ["Lecture Halls", "Computer Labs", "Faculty Offices"],
-    image: "/mendocino.jpg?height=200&width=300",
-  },
-  {
-    id: 3,
-    name: "Riverside Hall",
-    code: "RVR",
-    type: "academic",
-    floors: 5,
-    rooms: 50,
-    availableRooms: 15,
-    hours: "7:00 AM - 10:00 PM",
-    features: ["Engineering Labs", "Lecture Halls", "Study Areas"],
-    image: "/riverside.jpg?height=200&width=300",
-  },
-  {
-    id: 4,
-    name: "University Union",
-    code: "UU",
-    type: "student",
-    floors: 3,
-    rooms: 30,
-    availableRooms: 5,
-    hours: "7:00 AM - 11:00 PM",
-    features: ["Meeting Rooms", "Event Spaces", "Dining"],
-    image: "/UniversityUnion.jpg?height=200&width=300",
-  },
-  {
-    id: 5,
-    name: "Sequoia Hall",
-    code: "SEQ",
-    type: "academic",
-    floors: 4,
-    rooms: 40,
-    availableRooms: 10,
-    hours: "7:00 AM - 9:00 PM",
-    features: ["Classrooms", "Labs", "Study Areas"],
-    image: "/SequoiaHall.jpg?height=200&width=300",
-  },
-  {
-    id: 6,
-    name: "Placer Hall",
-    code: "PLC",
-    type: "academic",
-    floors: 3,
-    rooms: 30,
-    availableRooms: 7,
-    hours: "7:00 AM - 8:00 PM",
-    features: ["Lecture Halls", "Research Labs", "Faculty Offices"],
-    image: "/PlacerHall.jpg?height=200&width=300",
-  },
-]
-
 export default function HomePage() {
     // New state for search, selected building, and whether to show rooms list.
     const [searchTerm, setSearchTerm] = useState("")
     const [selectedBuilding, setSelectedBuilding] =  useState<Building | null>(null)
     const [showRooms, setShowRooms] = useState(false)
     const [showNearbyRooms, setShowNearbyRooms] = useState(false)
+
+    // State and Fetch for buildings data.
+    interface BuildingType {
+      id: number;
+      name: string;
+      code: string; // code like "LIB"
+      floors: number;
+      rooms: number;
+      availableRooms: number;
+      hours: string;
+      features: string[];
+      image: string;
+    }
+
+    const [buildings, setBuildings] = useState<BuildingType[]>([]);
+
+    useEffect(() => {
+      fetch("/data/buildings_data.json")
+        .then((res) => res.json())
+        .then((data) => setBuildings(data))
+        .catch((err) => console.error("Failed to load buildings:", err));
+    }, []);
   
     // Filter building suggestions based on typed text.
     const filteredBuildings = buildings.filter((b) =>
-      b.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+      b.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );    
   
     // Handle selecting a building suggestion.
     const handleSelectBuilding = (building: Building) => {
