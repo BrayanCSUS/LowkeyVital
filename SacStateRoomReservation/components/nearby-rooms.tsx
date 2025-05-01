@@ -181,10 +181,6 @@ export default function NearbyRooms() {
       </div>
 
       <div className="flex items-center justify-center mt-6">
-        <Button variant="outline" className="mr-2">
-          <MapPin className="mr-2 h-4 w-4" />
-          View on Map
-        </Button>
         <Button className="bg-[#00563F] hover:bg-[#00563F]/90">Load More Rooms</Button>
       </div>
     </div>
