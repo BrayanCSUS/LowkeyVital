@@ -1,0 +1,32 @@
+.popup-content {
+    width: 400px;
+    max-width: 100%;
+    color: white;
+    background-color: #043927;
+    padding: 20px;
+    border-radius: 8px;
+    outline: none;
+    border: none;
+    box-shadow: none;
+    font-size: 20px;
+}
+
+.modal {
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 12px; /* Adjust the font size as needed */
+}

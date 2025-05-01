@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import Sign_In_Button from "../login/sign_in_button"
 
 // Sample data for reservations
 const upcomingReservations = [
@@ -101,10 +102,7 @@ export default function ReservationsPage() {
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-            <Button variant="outline" className=" text-[#00563F] hover:bg-white hover:text-[#00563F]">
-              Sign In
-            </Button>
-            <Button className="bg-[#C4B581] text-[#00563F] hover:bg-[#d8c99a]">Sign Up</Button>
+            <Sign_In_Button />
           </div>
         </div>
       </header>

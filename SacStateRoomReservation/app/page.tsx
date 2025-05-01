@@ -9,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import RoomMap from "@/components/room-map"
 import NearbyRooms from "@/components/nearby-rooms"
 import RecentReservations from "@/components/recent-reservations"
+import Sign_In_Button from "./login/sign_in_button"
+
 // Sample building options for search suggestions
 interface Building {
   id: number
@@ -86,10 +88,7 @@ return (
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-            <Button variant="outline" className=" text-[#00563F] hover:bg-white hover:text-[#00563F]">
-              Sign In
-            </Button>
-            <Button className="bg-[#C4B581] text-[#00563F] hover:bg-[#d8c99a]">Sign Up</Button>
+            <Sign_In_Button />
           </div>
         </div>
       </header>
