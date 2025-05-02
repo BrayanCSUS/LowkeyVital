@@ -91,9 +91,6 @@ export default function ReservationsPage() {
             <Link href="/" className="text-sm font-medium hover:underline">
               Home
             </Link>
-            <Link href="/buildings" className="text-sm font-medium hover:underline">
-              Buildings
-            </Link>
             <Link href="/reservations" className="text-sm font-medium hover:underline">
               My Reservations
             </Link>

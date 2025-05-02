@@ -18,6 +18,7 @@ interface Building {
   id: number
   name: string
 }
+
 const buildings2: Building[] = [
   { id: 1, name: "University Library" },
   { id: 2, name: "Mendocino Hall" },
