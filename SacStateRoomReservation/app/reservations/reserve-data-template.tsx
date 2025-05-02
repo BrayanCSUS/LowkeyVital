@@ -4,7 +4,11 @@ export class Reservation {
     private endTime: number;
     private purpose: string;
     private numPersons: number;
-
+    //this variable is used to see if the reservation object is already being used
+    private canUse: boolean = true;
+    
+    //Constructor is not needed
+    
     // Getter methods to access the properties
     getBuilding(): string {
         return this.building;
@@ -45,6 +49,10 @@ export class Reservation {
 
     setNumPersons(numPersons: number): void {
         this.numPersons = numPersons;
+    }
+
+    setCanUse(canUse: boolean): void {
+        this.canUse = canUse;
     }
 }
 
