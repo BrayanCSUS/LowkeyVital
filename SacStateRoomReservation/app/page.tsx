@@ -14,19 +14,18 @@ import Sign_In_Button from "./login/sign_in_button"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { useEffect } from "react"
 
-// Sample building options for search suggestions
+// Building interface to define the structure of building data.
 interface Building {
-  id: number
-  name: string
+  id: number;
+  name: string;
+  code: string; // code like "LIB"
+  floors: number;
+  rooms: number;
+  availableRooms: number;
+  hours: string;
+  features: string[];
+  image: string;
 }
-const buildings2: Building[] = [
-  { id: 1, name: "University Library" },
-  { id: 2, name: "Mendocino Hall" },
-  { id: 3, name: "Riverside Hall" },
-  { id: 4, name: "University Union" },
-  { id: 5, name: "Sequoia Hall" },
-  { id: 6, name: "Placer Hall" },
-]
 
 // Sample rooms for demonstration purposes.
 // In your real app each building might have its own room list.
@@ -44,20 +43,8 @@ export default function HomePage() {
     const [showNearbyRooms, setShowNearbyRooms] = useState(false)
 
     // State and Fetch for buildings data.
-    interface BuildingType {
-      id: number;
-      name: string;
-      code: string; // code like "LIB"
-      floors: number;
-      rooms: number;
-      availableRooms: number;
-      hours: string;
-      features: string[];
-      image: string;
-    }
-
-    const [buildings, setBuildings] = useState<BuildingType[]>([]);
-
+    const [buildings, setBuildings] = useState<Building[]>([]);
+    // Fetch buildings data from JSON file on component mount.
     useEffect(() => {
       fetch("/data/buildings_data.json")
         .then((res) => res.json())
@@ -162,7 +149,7 @@ return (
                   className="bg-[#C4B581] text-[#00563F] hover:bg-[#d8c99a] w-full sm:w-auto"
                   onClick={handleFindRooms}
                 >
-                  Find Nearby Rooms
+                  Find Rooms
                 </Button>
               </div>
               {/* Scrollable rooms list based on selected building */}
