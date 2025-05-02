@@ -15,6 +15,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+interface Reservation {
+    building: string;
+    startTime: number;
+    endTime: number;
+    purpose: string;
+    numPersons: number;
+    //this variable is used to see if the reservation object is already being used
+    canUse: boolean;
+}
+
+//Import this to another file to access
+export const userReservations: Reservation[] = [ {}, {}, {} ];
+
 const ReserveRoom: React.FC = () => {
     const [open, setOpen] = useState(false);
     const [selectedRoom, setSelectedRoom] = useState({ building: 'Main Hall', room: 'Room 101', capacity: 10 }); // Example room data
@@ -24,9 +37,8 @@ const ReserveRoom: React.FC = () => {
 
     //Assuming maximum number of reservations is 3
     const getAvailableReservation = () => {
-        const reservations = [reservation1, reservation2, reservation3];
-        for (const reservation of reservations) {
-            if (reservation.canUse) {
+        for (const reservation of userReservations) { // Loop through userReservations
+            if (reservation.canUse == null || reservation.canUse) { // Check the canUse property of the current reservation
                 return reservation; // Return the first reservation that can be used
             }
         }
@@ -40,16 +52,16 @@ const ReserveRoom: React.FC = () => {
         const { id, value } = e.target;
         switch (id) {
             case 'building':
-                current?.setBuilding(building);
+                current.building = building;
                 break;
             case 'start-time':
-                current?.setStartTime(start);
+                current.startTime = start;
                 break;
             case 'end-time':
-                current?.setEndTime(end);
+                current.setEndTime = end;
                 break;
             case 'attendees':
-                current?.setNumPersons(num);
+                current.setNumPersons = num;
                 break;
             default:
                 break;
@@ -58,7 +70,7 @@ const ReserveRoom: React.FC = () => {
 
     //Maybe merge this with the switch
     const handlePurposeChange = (value: string) => {
-        current?.setPurpose(value);
+        current.setPurpose = value;
     };
 
     const handleSubmit = () => {
