@@ -22,8 +22,8 @@ interface Reservation {
     endTime: number;
     purpose: string;
     numPersons: number;
-    // This variable is used to see if the reservation object is already being used
-    canUse: boolean;
+    canUse: boolean; // This variable is used to see if the reservation object is already being used
+    date: string; // The date of the reservation in YYYY-MM-DD format
 }
 
 //Import this to another file to access
@@ -31,10 +31,11 @@ export const userReservations: Reservation[] = [ {}, {}, {} ];
 
 interface ReserveRoomProps {
     // Props for the ReserveRoom component, defining the details of the selected room
+    // This interface is designed to take data from nearbyRooms and pass it to the ReserveRoom component
     selectedRoom: {
-        building: string; // The name of the building where the room is located
-        room: string; // The specific room number or name
-        capacity: number; // The maximum number of people the room can accommodate
+        building: string;
+        room: string;
+        capacity: number;
     };
 }
 
@@ -47,6 +48,7 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
     const [end, setEnd] = useState('');
     const [num, setNum] = useState(0);
     const [purpose, setPurpose] = useState(''); // Add state for purpose
+    const [date, setDate] = useState('');
 
     const getAvailableReservation = () => {
         for (const reservation of userReservations) { // Loop through userReservations
@@ -69,6 +71,9 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
             case 'attendees':
                 setNum(parseInt(value, 10));
                 break;
+            case 'date':
+                setDate(value);
+                break;
             default:
                 break;
         }
@@ -88,7 +93,7 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
         }
 
         // Validate input
-        if (!start || !end || !num || !purpose) {
+        if (!date || !start || !end || !num || !purpose) {
             alert("Please fill out all fields.");
             return;
         }
@@ -108,7 +113,8 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
         current.endTime = parseInt(end.replace(':', ''), 10); // Convert time to a number
         current.purpose = purpose;
         current.numPersons = num;
-        current.canUse = false; // Mark as reserved
+        current.date = date; // Set the date
+        current.canUse = false;
 
         // Close the dialog
         setOpen(false);
@@ -118,6 +124,7 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
             `Reservation confirmed!\n\n` +
             `Building: ${current.building}\n` +
             `Room: ${current.room}\n` +
+            `Date: ${current.date}\n` +
             `Start Time: ${start}\n` +
             `End Time: ${end}\n` +
             `Purpose: ${current.purpose}`
@@ -154,6 +161,10 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
                                 <Label htmlFor="end-time">End Time</Label>
                                 <Input id="end-time" type="time" onChange={handleInputChange} />
                             </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="date">Date</Label>
+                            <Input id="date" type="date" onChange={handleInputChange} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="purpose">Purpose</Label>
