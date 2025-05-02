@@ -1,8 +1,8 @@
 /*
 TO DO LIST
-finish implement setting data into reservation objects (submit button)
-import building name if clicking reserve room from suggested building
-change value of information variables when given user input
+finish implement setting data into reservation objects (submit button) -- done
+import building name if clicking reserve room from suggested building  -- done
+change value of information variables when given user input  -- done
 some bug with Dialog
 Create delete system if user cancels reservation
 */
@@ -17,25 +17,37 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 interface Reservation {
     building: string;
+    room: string; // The specific room number or name
     startTime: number;
     endTime: number;
     purpose: string;
     numPersons: number;
-    //this variable is used to see if the reservation object is already being used
+    // This variable is used to see if the reservation object is already being used
     canUse: boolean;
 }
 
 //Import this to another file to access
 export const userReservations: Reservation[] = [ {}, {}, {} ];
 
-const ReserveRoom: React.FC = () => {
+interface ReserveRoomProps {
+    // Props for the ReserveRoom component, defining the details of the selected room
+    selectedRoom: {
+        building: string; // The name of the building where the room is located
+        room: string; // The specific room number or name
+        capacity: number; // The maximum number of people the room can accommodate
+    };
+}
+
+const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
     const [open, setOpen] = useState(false);
-    const [selectedRoom, setSelectedRoom] = useState({ building: 'Main Hall', room: 'Room 101', capacity: 10 }); // Example room data
 
-    //Store chosen information in these variables
-    let building: string, start: number, end: number, num: number;
+    // State variables for user input
+    const [building, setBuilding] = useState(selectedRoom.building);
+    const [start, setStart] = useState('');
+    const [end, setEnd] = useState('');
+    const [num, setNum] = useState(0);
+    const [purpose, setPurpose] = useState(''); // Add state for purpose
 
-    //Assuming maximum number of reservations is 3
     const getAvailableReservation = () => {
         for (const reservation of userReservations) { // Loop through userReservations
             if (reservation.canUse == null || reservation.canUse) { // Check the canUse property of the current reservation
@@ -45,36 +57,71 @@ const ReserveRoom: React.FC = () => {
         return null; // Return null if no reservations are available
     };
 
-    //The reservation object being used in this reservation
-    const current = getAvailableReservation();
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         switch (id) {
-            case 'building':
-                current.building = building;
-                break;
             case 'start-time':
-                current.startTime = start;
+                setStart(value);
                 break;
             case 'end-time':
-                current.setEndTime = end;
+                setEnd(value);
                 break;
             case 'attendees':
-                current.setNumPersons = num;
+                setNum(parseInt(value, 10));
                 break;
             default:
                 break;
         }
     };
 
-    //Maybe merge this with the switch
     const handlePurposeChange = (value: string) => {
-        current.setPurpose = value;
+        setPurpose(value); // Update the purpose state
     };
 
     const handleSubmit = () => {
-        //unfinished
+        // Find the first available reservation object
+        const current = getAvailableReservation();
+
+        if (!current) {
+            alert("No available reservation slots.");
+            return;
+        }
+
+        // Validate input
+        if (!start || !end || !num || !purpose) {
+            alert("Please fill out all fields.");
+            return;
+        }
+        if (start >= end) {
+            alert("Start time must be before end time.");
+            return;
+        }
+        if (num > selectedRoom.capacity) {
+            alert(`Number of attendees cannot exceed ${selectedRoom.capacity}.`);
+            return;
+        }
+
+        // Update the current reservation object with user inputs
+        current.building = building;
+        current.room = selectedRoom.room; // Set the room property
+        current.startTime = parseInt(start.replace(':', ''), 10); // Convert time to a number
+        current.endTime = parseInt(end.replace(':', ''), 10); // Convert time to a number
+        current.purpose = purpose;
+        current.numPersons = num;
+        current.canUse = false; // Mark as reserved
+
+        // Close the dialog
+        setOpen(false);
+
+        // Show a success message with the latest reservation details
+        alert(
+            `Reservation confirmed!\n\n` +
+            `Building: ${current.building}\n` +
+            `Room: ${current.room}\n` +
+            `Start Time: ${start}\n` +
+            `End Time: ${end}\n` +
+            `Purpose: ${current.purpose}`
+        );
     };
 
     return (
@@ -83,7 +130,9 @@ const ReserveRoom: React.FC = () => {
                 <DialogTrigger asChild>
                     <Button
                         className="bg-[#C4B581] text-[#00563F] hover:bg-[#C4B581]/90"
-                        onClick={() => setSelectedRoom(selectedRoom)} // Assuming you want to keep the selected room
+                        onClick={() => {
+                            setBuilding(selectedRoom.building); // Set the building state dynamically
+                        }}
                     >
                         Reserve Room
                     </Button>
@@ -108,8 +157,9 @@ const ReserveRoom: React.FC = () => {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="purpose">Purpose</Label>
-                            <Select onValueChange={handlePurposeChange}>
+                            <Select onValueChange={handlePurposeChange} value={purpose}>
                                 <SelectTrigger id="purpose">
+                                    <SelectValue placeholder="Select a purpose" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="study">Individual Study</SelectItem>

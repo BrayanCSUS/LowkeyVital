@@ -119,7 +119,7 @@ export default function NearbyRooms() {
               </div>
             </CardContent>
             <CardFooter className="p-4 pt-0 flex justify-end">
-              <ReserveRoom></ReserveRoom>
+              <ReserveRoom selectedRoom={room} />
             </CardFooter>
           </Card>
         ))}
