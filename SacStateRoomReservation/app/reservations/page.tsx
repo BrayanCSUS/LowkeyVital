@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Building, Calendar, Clock, Download, MapPin, Trash } from "lucide-react"
+import { Building, Calendar, Clock, CircleAlert, MapPin, Trash } from "lucide-react"
 import Link from "next/link"
 import {
   Dialog,
@@ -242,10 +242,7 @@ export default function ReservationsPage() {
                         </div>
                       </CardContent>
                       <CardFooter className="p-4 pt-2 flex flex-wrap justify-end gap-2">
-                        <Button variant="outline" size="sm">
-                          <MapPin className="h-4 w-4 mr-2" />
-                          Directions
-                        </Button>
+                        
                         <Dialog>
                           <DialogTrigger asChild>
                             <Button variant="outline" size="sm" onClick={() => setSelectedReservation(reservation)}>
@@ -294,9 +291,9 @@ export default function ReservationsPage() {
                               </div>
                             </div>
                             <DialogFooter className="flex justify-between">
-                              <Button variant="outline" size="sm">
-                                <Download className="h-4 w-4 mr-2" />
-                                Download
+                              <Button variant="destructive" size="sm">
+                                <CircleAlert className="h-4 w-4 mr-2" />
+                                Take a Screenshot!
                               </Button>
                               <Button className="bg-[#00563F] hover:bg-[#00563F]/90">Close</Button>
                             </DialogFooter>
