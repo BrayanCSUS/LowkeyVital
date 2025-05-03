@@ -1,17 +1,49 @@
+"""
+Description:
+- This script scrapes class schedule data from the Sacramento State University class schedule website.
+- The script uses Selenium to automate the browser and scrape data.
+- It collects information about classes, including building, room, days, start time, and end time.
+- The data is saved in a JSON file for further processing or analysis.
+
+How to Run:
+- Make sure you have Python and Firefox installed on your system.
+- Install the required dependencies, including Selenium:
+   pip install selenium
+- Update the `gecko_path` variable to point to your `geckodriver` executable.
+    - You can download `geckodriver` from: https://github.com/mozilla/geckodriver/releases.
+- Run the script:
+   python schedule_scraper.py
+- The scraped data will be saved in the `ScrapedSchedules` folder as a JSON file.
+"""
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from urllib.parse import urljoin
 from collections import defaultdict
 import json
 import time
+import os
 
 # Path to geckodriver
-# NOTE: Update the path below to the location of geckodriver on your system.
-# You can download geckodriver from: https://github.com/mozilla/geckodriver/releases
 gecko_path = r"C:\Users\nmira\Documents\College\drivers\geckodriver.exe"
+
+# Define the semester and year as a single variable
+semester_year = "summer-2025"  # Change this value for each new semester
+
+# Construct the directory URL dynamically using the semester and year
+directory_url = f"https://www.csus.edu/class-schedule/{semester_year}/"
+
+# Ensure the output folder exists
+output_folder = 'ScrapedSchedules'
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)  # Create the folder if it doesn't exist
+
+# Set the output file name dynamically based on the semester and year
+output_file_name = f"{semester_year}_schedule.json"
+output_path = os.path.join(output_folder, output_file_name)
+
+print(f"📂 Output file will be saved as: {output_path}")
 
 # Set up Firefox driver
 service = Service(executable_path=gecko_path)
@@ -19,16 +51,15 @@ driver = webdriver.Firefox(service=service)
 
 # Step 1: Get all major links
 # Navigate to the directory URL containing links to all majors
-directory_url = "https://www.csus.edu/class-schedule/fall-2025/"
 driver.get(directory_url)
 
 # Wait until at least one link to a major page is present on the page
 WebDriverWait(driver, 20).until(
-    EC.presence_of_element_located((By.XPATH, '//a[contains(@href, "/class-schedule/fall-2025/")]'))
+    EC.presence_of_element_located((By.XPATH, f'//a[contains(@href, "/class-schedule/{semester_year}/")]'))
 )
 
 # Extract all links to major pages
-link_elements = driver.find_elements(By.XPATH, '//a[contains(@href, "/class-schedule/fall-2025/")]')
+link_elements = driver.find_elements(By.XPATH, f'//a[contains(@href, "/class-schedule/{semester_year}/")]')
 major_links = []
 for elem in link_elements:
     href = elem.get_attribute("href")
@@ -121,7 +152,6 @@ for url in major_links:
             continue
 
     # Save the updated list to JSON file after each major page
-    output_path = '../Outputs/schedule1.json'
     with open(output_path, 'w') as f:
         json.dump(class_list, f, indent=2)
     print(f"💾 Partial save complete to {output_path}.")
@@ -129,4 +159,4 @@ for url in major_links:
 # Done
 # Close the browser and print a success message
 driver.quit()
-print("\n✅ Room schedule saved to schedule1.json")
+print(f"\n✅ Room schedule saved to {output_path}")
