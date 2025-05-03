@@ -14,6 +14,17 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
 
 interface Reservation {
     building: string;
@@ -41,6 +52,10 @@ interface ReserveRoomProps {
 
 const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
     const [open, setOpen] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
 
     // State variables for user input
     const [building, setBuilding] = useState(selectedRoom.building);
@@ -88,21 +103,25 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
         const current = getAvailableReservation();
 
         if (!current) {
-            alert("No available reservation slots.");
+            setAlertMessage("No available reservation slots.");
+            setShowAlert(true);
             return;
         }
 
         // Validate input
         if (!date || !start || !end || !num || !purpose) {
-            alert("Please fill out all fields.");
+            setAlertMessage("Please fill out all fields.");
+            setShowAlert(true);
             return;
         }
         if (start >= end) {
-            alert("Start time must be before end time.");
+            setAlertMessage("Start time must be before end time.");
+            setShowAlert(true);
             return;
         }
         if (num > selectedRoom.capacity) {
-            alert(`Number of attendees cannot exceed ${selectedRoom.capacity}.`);
+            setAlertMessage(`Number of attendees cannot exceed ${selectedRoom.capacity}.`);
+            setShowAlert(true);
             return;
         }
 
@@ -116,11 +135,21 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
         current.date = date; // Set the date
         current.canUse = false;
 
-        // Close the dialog
-        setOpen(false);
+        // Save to localStorage
+        const saved = JSON.parse(localStorage.getItem("reservations") || "[]");
+        saved.push({
+            building: current.building,
+            room: current.room,
+            date: current.date,
+            startTime: start,
+            endTime: end,
+            purpose: current.purpose,
+            attendees: num,
+        });
+        localStorage.setItem("reservations", JSON.stringify(saved));
 
-        // Show a success message with the latest reservation details
-        alert(
+        // Show a success dialog using shadcn UI
+        setSuccessMessage(
             `Reservation confirmed!\n\n` +
             `Building: ${current.building}\n` +
             `Room: ${current.room}\n` +
@@ -129,6 +158,8 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
             `End Time: ${end}\n` +
             `Purpose: ${current.purpose}`
         );
+        setShowSuccess(true);
+        setOpen(false);
     };
 
     return (
@@ -192,6 +223,32 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
+            <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Notice</AlertDialogTitle>
+                        <AlertDialogDescription>{alertMessage}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => setShowAlert(false)}>OK</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            <AlertDialog open={showSuccess} onOpenChange={setShowSuccess}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Reservation Confirmed</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {successMessage.split('\n').map((line, idx) => (
+                                <div key={idx}>{line}</div>
+                            ))}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => setShowSuccess(false)}>OK</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 };
