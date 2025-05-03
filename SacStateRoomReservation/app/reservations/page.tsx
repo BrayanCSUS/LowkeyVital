@@ -77,8 +77,8 @@ const pastReservations = [
 ]
 
 export default function ReservationsPage() {
-  const [selectedReservation, setSelectedReservation] = useState(null)
-  const [savedReservations, setSavedReservations] = useState([])
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
+  const [savedReservations, setSavedReservations] = useState<Reservation[]>([])
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("reservations") || "[]")
@@ -86,10 +86,22 @@ export default function ReservationsPage() {
   }, [])
 
   // Handler to cancel a reservation
-  const handleCancelReservation = (reservationId) => {
+  interface Reservation {
+    id: number | string;
+    building: string;
+    room: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    purpose: string;
+    attendees: number;
+    status?: string;
+  }
+
+  const handleCancelReservation = (reservationId: string): void => {
     // Remove from localStorage
-    const data = JSON.parse(localStorage.getItem("reservations") || "[]");
-    const updated = data.filter((r, i) => `saved-${i}` !== reservationId);
+    const data: Reservation[] = JSON.parse(localStorage.getItem("reservations") || "[]");
+    const updated: Reservation[] = data.filter((_, i) => `saved-${i}` !== reservationId);
     localStorage.setItem("reservations", JSON.stringify(updated));
     setSavedReservations(updated);
   };
@@ -97,8 +109,8 @@ export default function ReservationsPage() {
   // Combine localStorage reservations with sample data for upcoming and past
   const allReservations = [
     ...savedReservations.map((r, i) => ({
-      id: `saved-${i}`,
       ...r,
+      id: `saved-${i}`,
       status: "upcoming", // You can add logic to determine status
     })),
     ...upcomingReservations.map(r => ({ ...r, status: "upcoming" })),
@@ -107,16 +119,20 @@ export default function ReservationsPage() {
 
   // Split into upcoming and past for tabs
   const now = new Date()
-  const isPast = (r) => {
-    if (!r.date) return false
-    // Try to parse date in YYYY-MM-DD or other formats
-    const d = new Date(r.date)
-    // If the date is invalid, treat as upcoming
-    if (isNaN(d.getTime())) return false
-    // If the date is today or in the future, it's upcoming
-    d.setHours(23,59,59,999)
-    return d < now
+  interface ReservationWithStatus extends Reservation {
+    status?: string;
   }
+
+  const isPast = (r: ReservationWithStatus): boolean => {
+    if (!r.date) return false;
+    // Try to parse date in YYYY-MM-DD or other formats
+    const d = new Date(r.date);
+    // If the date is invalid, treat as upcoming
+    if (isNaN(d.getTime())) return false;
+    // If the date is today or in the future, it's upcoming
+    d.setHours(23, 59, 59, 999);
+    return d < now;
+  };
   const upcoming = allReservations.filter(r => r.status === "upcoming" && !isPast(r))
   const past = allReservations.filter(r => r.status === "completed" || isPast(r))
 
@@ -257,7 +273,7 @@ export default function ReservationsPage() {
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
-                        <Button variant="destructive" size="sm" onClick={() => handleCancelReservation(reservation.id)}>
+                        <Button variant="destructive" size="sm" onClick={() => handleCancelReservation(reservation.id.toString())}>
                           <Trash className="h-4 w-4 mr-2" />
                           Cancel
                         </Button>
