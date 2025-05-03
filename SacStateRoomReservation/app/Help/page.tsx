@@ -17,7 +17,6 @@ export default function HelpPage() {
           </div>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/" className="text-sm font-medium hover:underline">Home</Link>
-            <Link href="/buildings" className="text-sm font-medium hover:underline">Buildings</Link>
             <Link href="/reservations" className="text-sm font-medium hover:underline">My Reservations</Link>
             <Link href="/help" className="text-sm font-medium hover:underline">Help</Link>
           </nav>
