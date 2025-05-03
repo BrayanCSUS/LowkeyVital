@@ -54,6 +54,8 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
     const [open, setOpen] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
 
     // State variables for user input
     const [building, setBuilding] = useState(selectedRoom.building);
@@ -133,11 +135,21 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
         current.date = date; // Set the date
         current.canUse = false;
 
-        // Close the dialog
-        setOpen(false);
+        // Save to localStorage
+        const saved = JSON.parse(localStorage.getItem("reservations") || "[]");
+        saved.push({
+            building: current.building,
+            room: current.room,
+            date: current.date,
+            startTime: start,
+            endTime: end,
+            purpose: current.purpose,
+            attendees: num,
+        });
+        localStorage.setItem("reservations", JSON.stringify(saved));
 
-        // Show a success message with the latest reservation details
-        alert(
+        // Show a success dialog using shadcn UI
+        setSuccessMessage(
             `Reservation confirmed!\n\n` +
             `Building: ${current.building}\n` +
             `Room: ${current.room}\n` +
@@ -146,6 +158,8 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
             `End Time: ${end}\n` +
             `Purpose: ${current.purpose}`
         );
+        setShowSuccess(true);
+        setOpen(false);
     };
 
     return (
@@ -217,6 +231,21 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogAction onClick={() => setShowAlert(false)}>OK</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            <AlertDialog open={showSuccess} onOpenChange={setShowSuccess}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Reservation Confirmed</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {successMessage.split('\n').map((line, idx) => (
+                                <div key={idx}>{line}</div>
+                            ))}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => setShowSuccess(false)}>OK</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

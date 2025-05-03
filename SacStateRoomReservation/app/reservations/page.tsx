@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -78,6 +78,12 @@ const pastReservations = [
 
 export default function ReservationsPage() {
   const [selectedReservation, setSelectedReservation] = useState(null)
+  const [savedReservations, setSavedReservations] = useState([])
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("reservations") || "[]")
+    setSavedReservations(data)
+  }, [])
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -116,6 +122,23 @@ export default function ReservationsPage() {
               New Reservation
             </Button>
           </div>
+
+          <h2 className="text-xl font-bold mb-4">Your Reservations</h2>
+          {savedReservations.length === 0 ? (
+            <p>No reservations found.</p>
+          ) : (
+            <ul className="space-y-2 mb-8">
+              {savedReservations.map((r, i) => (
+                <li key={i} className="border rounded p-4 bg-white text-black">
+                  <div className="font-semibold">{r.building} {r.room}</div>
+                  <div>Date: {r.date}</div>
+                  <div>Time: {r.startTime} - {r.endTime}</div>
+                  <div>Purpose: {r.purpose}</div>
+                  <div>Attendees: {r.attendees}</div>
+                </li>
+              ))}
+            </ul>
+          )}
 
           <Tabs defaultValue="upcoming" className="mb-8">
             <TabsList>
