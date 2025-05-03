@@ -12,21 +12,20 @@ import NearbyRooms from "@/components/nearby-rooms"
 import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { useEffect } from "react"
 
-// Sample building options for search suggestions
+// Building interface to define the structure of building data.
 interface Building {
-  id: number
-  name: string
+  id: number;
+  name: string;
+  code: string; // code like "LIB"
+  floors: number;
+  rooms: number;
+  availableRooms: number;
+  hours: string;
+  features: string[];
+  image: string;
 }
-
-const buildings2: Building[] = [
-  { id: 1, name: "University Library" },
-  { id: 2, name: "Mendocino Hall" },
-  { id: 3, name: "Riverside Hall" },
-  { id: 4, name: "University Union" },
-  { id: 5, name: "Sequoia Hall" },
-  { id: 6, name: "Placer Hall" },
-]
 
 // Sample rooms for demonstration purposes.
 // In your real app each building might have its own room list.
@@ -36,93 +35,27 @@ const sampleRooms = [
   { id: 3, roomNumber: "103", name: "Room 103" },
 ]
 
-// Sample data for buildings
-const buildings = [
-  {
-    id: 1,
-    name: "University Library",
-    code: "LIB",
-    type: "academic",
-    floors: 4,
-    rooms: 42,
-    availableRooms: 12,
-    hours: "7:00 AM - 10:00 PM",
-    features: ["Study Rooms", "Computer Labs", "Quiet Zones"],
-    image: "/library.jpg?height=200&width=300",
-  },
-  {
-    id: 2,
-    name: "Mendocino Hall",
-    code: "MND",
-    type: "academic",
-    floors: 3,
-    rooms: 36,
-    availableRooms: 8,
-    hours: "7:00 AM - 9:00 PM",
-    features: ["Lecture Halls", "Computer Labs", "Faculty Offices"],
-    image: "/mendocino.jpg?height=200&width=300",
-  },
-  {
-    id: 3,
-    name: "Riverside Hall",
-    code: "RVR",
-    type: "academic",
-    floors: 5,
-    rooms: 50,
-    availableRooms: 15,
-    hours: "7:00 AM - 10:00 PM",
-    features: ["Engineering Labs", "Lecture Halls", "Study Areas"],
-    image: "/riverside.jpg?height=200&width=300",
-  },
-  {
-    id: 4,
-    name: "University Union",
-    code: "UU",
-    type: "student",
-    floors: 3,
-    rooms: 30,
-    availableRooms: 5,
-    hours: "7:00 AM - 11:00 PM",
-    features: ["Meeting Rooms", "Event Spaces", "Dining"],
-    image: "/UniversityUnion.jpg?height=200&width=300",
-  },
-  {
-    id: 5,
-    name: "Sequoia Hall",
-    code: "SEQ",
-    type: "academic",
-    floors: 4,
-    rooms: 40,
-    availableRooms: 10,
-    hours: "7:00 AM - 9:00 PM",
-    features: ["Classrooms", "Labs", "Study Areas"],
-    image: "/SequoiaHall.jpg?height=200&width=300",
-  },
-  {
-    id: 6,
-    name: "Placer Hall",
-    code: "PLC",
-    type: "academic",
-    floors: 3,
-    rooms: 30,
-    availableRooms: 7,
-    hours: "7:00 AM - 8:00 PM",
-    features: ["Lecture Halls", "Research Labs", "Faculty Offices"],
-    image: "/PlacerHall.jpg?height=200&width=300",
-  },
-]
-
 export default function HomePage() {
     // New state for search, selected building, and whether to show rooms list.
     const [searchTerm, setSearchTerm] = useState("")
     const [selectedBuilding, setSelectedBuilding] =  useState<Building | null>(null)
     const [showRooms, setShowRooms] = useState(false)
     const [showNearbyRooms, setShowNearbyRooms] = useState(false)
+
+    // State and Fetch for buildings data.
+    const [buildings, setBuildings] = useState<Building[]>([]);
+    // Fetch buildings data from JSON file on component mount.
+    useEffect(() => {
+      fetch("/data/buildings_data.json")
+        .then((res) => res.json())
+        .then((data) => setBuildings(data))
+        .catch((err) => console.error("Failed to load buildings:", err));
+    }, []);
   
     // Filter building suggestions based on typed text.
     const filteredBuildings = buildings.filter((b) =>
-      b.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+      b.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );    
   
     // Handle selecting a building suggestion.
     const handleSelectBuilding = (building: Building) => {
@@ -216,7 +149,7 @@ return (
                   className="bg-[#C4B581] text-[#00563F] hover:bg-[#d8c99a] w-full sm:w-auto"
                   onClick={handleFindRooms}
                 >
-                  Find Nearby Rooms
+                  Find Rooms
                 </Button>
               </div>
               {/* Scrollable rooms list based on selected building */}
@@ -286,6 +219,8 @@ return (
               <h1 className="text-3xl font-bold">Campus Buildings</h1>
               <p className="text-muted-foreground mt-1">Browse all buildings and available rooms on campus</p>
             </div>
+
+            {/*}
             <div className="flex items-center gap-2 w-full md:w-auto">
               <div className="relative flex-1 md:w-64">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -294,9 +229,10 @@ return (
               <Button variant="outline" size="icon">
                 <Filter className="h-4 w-4" />
               </Button>
-            </div>
-          </div>
-
+            </div> *
+          </div>*/}
+          
+        
           <Tabs defaultValue="all" className="mb-8">
             <TabsList>
               <TabsTrigger value="all">All Buildings</TabsTrigger>
@@ -305,6 +241,8 @@ return (
               <TabsTrigger value="student">Student Services</TabsTrigger>
             </TabsList>
           </Tabs>
+        
+        </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredBuildings.map((building) => (
