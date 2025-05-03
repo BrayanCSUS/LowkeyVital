@@ -85,6 +85,41 @@ export default function ReservationsPage() {
     setSavedReservations(data)
   }, [])
 
+  // Handler to cancel a reservation
+  const handleCancelReservation = (reservationId) => {
+    // Remove from localStorage
+    const data = JSON.parse(localStorage.getItem("reservations") || "[]");
+    const updated = data.filter((r, i) => `saved-${i}` !== reservationId);
+    localStorage.setItem("reservations", JSON.stringify(updated));
+    setSavedReservations(updated);
+  };
+
+  // Combine localStorage reservations with sample data for upcoming and past
+  const allReservations = [
+    ...savedReservations.map((r, i) => ({
+      id: `saved-${i}`,
+      ...r,
+      status: "upcoming", // You can add logic to determine status
+    })),
+    ...upcomingReservations.map(r => ({ ...r, status: "upcoming" })),
+    ...pastReservations.map(r => ({ ...r, status: "completed" })),
+  ]
+
+  // Split into upcoming and past for tabs
+  const now = new Date()
+  const isPast = (r) => {
+    if (!r.date) return false
+    // Try to parse date in YYYY-MM-DD or other formats
+    const d = new Date(r.date)
+    // If the date is invalid, treat as upcoming
+    if (isNaN(d.getTime())) return false
+    // If the date is today or in the future, it's upcoming
+    d.setHours(23,59,59,999)
+    return d < now
+  }
+  const upcoming = allReservations.filter(r => r.status === "upcoming" && !isPast(r))
+  const past = allReservations.filter(r => r.status === "completed" || isPast(r))
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-10 border-b bg-[#00563F] text-white">
@@ -123,23 +158,6 @@ export default function ReservationsPage() {
             </Button>
           </div>
 
-          <h2 className="text-xl font-bold mb-4">Your Reservations</h2>
-          {savedReservations.length === 0 ? (
-            <p>No reservations found.</p>
-          ) : (
-            <ul className="space-y-2 mb-8">
-              {savedReservations.map((r, i) => (
-                <li key={i} className="border rounded p-4 bg-white text-black">
-                  <div className="font-semibold">{r.building} {r.room}</div>
-                  <div>Date: {r.date}</div>
-                  <div>Time: {r.startTime} - {r.endTime}</div>
-                  <div>Purpose: {r.purpose}</div>
-                  <div>Attendees: {r.attendees}</div>
-                </li>
-              ))}
-            </ul>
-          )}
-
           <Tabs defaultValue="upcoming" className="mb-8">
             <TabsList>
               <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
@@ -148,9 +166,9 @@ export default function ReservationsPage() {
             </TabsList>
 
             <TabsContent value="upcoming" className="mt-6">
-              {upcomingReservations.length > 0 ? (
+              {upcoming.length > 0 ? (
                 <div className="grid gap-4">
-                  {upcomingReservations.map((reservation) => (
+                  {upcoming.map((reservation) => (
                     <Card key={reservation.id}>
                       <CardHeader className="p-4 pb-2">
                         <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
@@ -226,7 +244,7 @@ export default function ReservationsPage() {
                               <div className="border-t pt-4 mt-4">
                                 <h4 className="font-medium text-sm mb-2">Reservation Code</h4>
                                 <div className="bg-gray-100 p-3 rounded-md text-center font-mono">
-                                  SACST-{selectedReservation?.id.toString().padStart(4, "0")}
+                                  SACST-{selectedReservation?.id?.toString().padStart(4, "0")}
                                 </div>
                               </div>
                             </div>
@@ -239,7 +257,7 @@ export default function ReservationsPage() {
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
-                        <Button variant="destructive" size="sm">
+                        <Button variant="destructive" size="sm" onClick={() => handleCancelReservation(reservation.id)}>
                           <Trash className="h-4 w-4 mr-2" />
                           Cancel
                         </Button>
@@ -258,9 +276,9 @@ export default function ReservationsPage() {
             </TabsContent>
 
             <TabsContent value="past" className="mt-6">
-              {pastReservations.length > 0 ? (
+              {past.length > 0 ? (
                 <div className="grid gap-4">
-                  {pastReservations.map((reservation) => (
+                  {past.map((reservation) => (
                     <Card key={reservation.id}>
                       <CardHeader className="p-4 pb-2">
                         <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
