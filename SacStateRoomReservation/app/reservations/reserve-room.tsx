@@ -48,10 +48,17 @@ interface ReserveRoomProps {
         room: string;
         capacity: number;
     };
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
+    onSuccess?: () => void;
 }
 
-const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
-    const [open, setOpen] = useState(false);
+const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlledOpen, onOpenChange, onSuccess }) => {
+    const isControlled = controlledOpen !== undefined && onOpenChange !== undefined;
+    const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+    const open = isControlled ? controlledOpen : uncontrolledOpen;
+    const setOpen = isControlled ? onOpenChange : setUncontrolledOpen;
+
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccess, setShowSuccess] = useState(false);
@@ -160,12 +167,14 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
         );
         setShowSuccess(true);
         setOpen(false);
+        if (onSuccess) onSuccess();
     };
 
     return (
         <div>
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
+                {!isControlled && (
+                  <DialogTrigger asChild>
                     <Button
                         className="bg-[#C4B581] text-[#00563F] hover:bg-[#C4B581]/90"
                         onClick={() => {
@@ -174,7 +183,8 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom }) => {
                     >
                         Reserve Room
                     </Button>
-                </DialogTrigger>
+                  </DialogTrigger>
+                )}
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Reserve Room</DialogTitle>
