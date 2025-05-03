@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { HelpCircle, Info, Search, MapPin, Mail, Phone, User } from "lucide-react"
+import { HelpCircle, Info, Search, MapPin, Mail, Phone } from "lucide-react"
 import Sign_In_Button from "../login/sign_in_button"
 
 export default function HelpPage() {
@@ -17,7 +17,6 @@ export default function HelpPage() {
           </div>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/" className="text-sm font-medium hover:underline">Home</Link>
-            <Link href="/buildings" className="text-sm font-medium hover:underline">Buildings</Link>
             <Link href="/reservations" className="text-sm font-medium hover:underline">My Reservations</Link>
             <Link href="/help" className="text-sm font-medium hover:underline">Help</Link>
           </nav>
@@ -95,6 +94,14 @@ export default function HelpPage() {
                   Some rooms may be reserved for faculty or maintenance. Only student-accessible spaces will appear under your account.
                 </CardContent>
               </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Why can't I call your mom?</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  BECAUSE IM TOO BLOODY BUSY DOING HER YA WANK!!!
+                </CardContent>
+              </Card>
             </div>
           </section>
 
@@ -130,7 +137,7 @@ export default function HelpPage() {
 
       <footer className="border-t bg-[#00563F] text-white py-6">
         <div className="container px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm">© © 2025 Team Lowkey Vital. All rights reserved. All rights reserved.</p>
+          <p className="text-sm">© 2025 Sacramento State University. All rights reserved.</p>
           <nav className="flex items-center gap-4 text-xs">
             <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
             <Link href="/terms" className="hover:underline">Terms of Service</Link>
