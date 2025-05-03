@@ -13,6 +13,8 @@ import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { useEffect } from "react"
+import { set } from "react-hook-form"
+import { DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 // Building interface to define the structure of building data.
 interface Building {
@@ -41,6 +43,8 @@ export default function HomePage() {
     const [selectedBuilding, setSelectedBuilding] =  useState<Building | null>(null)
     const [showRooms, setShowRooms] = useState(false)
     const [showNearbyRooms, setShowNearbyRooms] = useState(false)
+
+    const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
 
     // State and Fetch for buildings data.
     const [buildings, setBuildings] = useState<Building[]>([]);
@@ -72,6 +76,13 @@ export default function HomePage() {
         alert("Please select a building from the suggestions.")
       }
     }
+
+    // Handle click of the "View Details" button.
+    const handleViewBuildingDetails = (building: Building) => {
+      setSelectedBuilding(building); // Set the selected building
+      setIsModalOpen(true); // Open the modal
+    };
+
     const sampleRooms = [
       { id: 1, roomNumber: "101", name: "Room 101" },
       { id: 2, roomNumber: "102", name: "Room 102" },
@@ -167,7 +178,10 @@ return (
                         <p className="font-medium">{room.name}</p>
                         <p className="text-xs text-gray-600">Room {room.roomNumber}</p>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <Button
+                        variant="outline"
+                        onClick={() => handleViewBuildingDetails(selectedBuilding)} // Open modal with building details
+                      >
                         View Details
                       </Button>
                     </div>
@@ -178,7 +192,26 @@ return (
           </div>
         </section>
 
-        {/*
+        {/* Modal to display building details */}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{selectedBuilding?.name}</DialogTitle>
+            </DialogHeader>
+            <div>
+              {/* TODO: Add building details here */}
+              <p>Building Code: {selectedBuilding?.code}</p>
+              <p>Number of Floors: {selectedBuilding?.floors}</p>
+              <p>Operating Hours: {selectedBuilding?.hours}</p>
+              <p>Available Rooms: {selectedBuilding?.availableRooms}</p>
+            </div>
+            <Button className="mt-4" onClick={() => setIsModalOpen(false)}>
+              Close
+            </Button>
+          </DialogContent>
+        </Dialog>
+
+        {/* 
         <section className="py-12">
           <div className="container px-4">
             <Tabs defaultValue="map" className="mx-auto max-w-4xl">
