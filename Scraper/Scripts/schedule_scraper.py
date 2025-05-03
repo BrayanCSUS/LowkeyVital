@@ -9,6 +9,8 @@ import json
 import time
 
 # Path to geckodriver
+# NOTE: Update the path below to the location of geckodriver on your system.
+# You can download geckodriver from: https://github.com/mozilla/geckodriver/releases
 gecko_path = r"C:\Users\nmira\Documents\College\drivers\geckodriver.exe"
 
 # Set up Firefox driver
