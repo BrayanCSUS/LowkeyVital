@@ -9,6 +9,7 @@ import {useState} from "react"
 import Link from "next/link"
 import Sign_In_Button from "../login/sign_in_button"
 
+{/*}
 // Sample data for buildings
 const buildings = [
   {
@@ -84,6 +85,7 @@ const buildings = [
     image: "/PlacerHall.jpg?height=200&width=300",
   },
 ]
+  */}
 
 export default function BuildingsPage() {
   const [searchTerm, setSearchTerm] = useState("")
