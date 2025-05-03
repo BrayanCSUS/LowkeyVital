@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Building, Calendar, Clock, Download, MapPin, Trash } from "lucide-react"
+import { Building, Calendar, Clock, CircleAlert, MapPin, Trash } from "lucide-react"
 import Link from "next/link"
 import {
   Dialog,
@@ -114,6 +114,36 @@ export default function ReservationsPage() {
     setSavedReservations(updated);
   };
 
+
+  // Helper to format date as 'Month Day, Year' or Today/Tomorrow
+  function formatReservationDate(dateStr: string) {
+    if (!dateStr) return "";
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr; // fallback for invalid date
+    const isToday = d.toDateString() === today.toDateString();
+    const isTomorrow = d.toDateString() === tomorrow.toDateString();
+    if (isToday) return "Today";
+    if (isTomorrow) return "Tomorrow";
+    return d.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+  }
+
+  // Helper to format time as 'h:mm AM/PM'
+  function formatReservationTime(time: string) {
+    if (!time) return "";
+    // If already in AM/PM format, return as is
+    if (time.match(/AM|PM/i)) return time;
+    // If in HH:mm or H:mm format
+    const [h, m] = time.split(":");
+    if (h === undefined || m === undefined) return time;
+    const date = new Date();
+    date.setHours(Number(h));
+    date.setMinutes(Number(m));
+    return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
+  }
+
   // Helper to get capacity for a building/room (fallback to 20 if unknown)
   const getCapacity = (building: string, room: string): number => {
     // You can enhance this to look up real capacity from your data
@@ -124,6 +154,7 @@ export default function ReservationsPage() {
     if (building === "University Union") return 15;
     return 20;
   };
+
 
   // Combine localStorage reservations with sample data for upcoming and past
   const allReservations = [
@@ -218,12 +249,12 @@ export default function ReservationsPage() {
                         <div className="grid md:grid-cols-3 gap-4 text-sm">
                           <div className="flex items-center">
                             <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                            <span>{reservation.date}</span>
+                            <span>{formatReservationDate(reservation.date)}</span>
                           </div>
                           <div className="flex items-center">
                             <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
                             <span>
-                              {reservation.startTime} - {reservation.endTime}
+                              {formatReservationTime(reservation.startTime)} - {formatReservationTime(reservation.endTime)}
                             </span>
                           </div>
                           <div className="flex items-center">
@@ -233,10 +264,7 @@ export default function ReservationsPage() {
                         </div>
                       </CardContent>
                       <CardFooter className="p-4 pt-2 flex flex-wrap justify-end gap-2">
-                        <Button variant="outline" size="sm">
-                          <MapPin className="h-4 w-4 mr-2" />
-                          Directions
-                        </Button>
+                        
                         <Dialog>
                           <DialogTrigger asChild>
                             <Button variant="outline" size="sm" onClick={() => setSelectedReservation(reservation)}>
@@ -258,14 +286,14 @@ export default function ReservationsPage() {
                                 </div>
                                 <div>
                                   <h4 className="font-medium text-sm">Date</h4>
-                                  <p>{selectedReservation?.date}</p>
+                                  <p>{formatReservationDate(selectedReservation?.date || "")}</p>
                                 </div>
                               </div>
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <h4 className="font-medium text-sm">Time</h4>
                                   <p>
-                                    {selectedReservation?.startTime} - {selectedReservation?.endTime}
+                                    {formatReservationTime(selectedReservation?.startTime || "")} - {formatReservationTime(selectedReservation?.endTime || "")}
                                   </p>
                                 </div>
                                 <div>
@@ -285,9 +313,9 @@ export default function ReservationsPage() {
                               </div>
                             </div>
                             <DialogFooter className="flex justify-between">
-                              <Button variant="outline" size="sm">
-                                <Download className="h-4 w-4 mr-2" />
-                                Download
+                              <Button variant="destructive" size="sm">
+                                <CircleAlert className="h-4 w-4 mr-2" />
+                                Take a Screenshot!
                               </Button>
                               <Button className="bg-[#00563F] hover:bg-[#00563F]/90">Close</Button>
                             </DialogFooter>
@@ -330,12 +358,12 @@ export default function ReservationsPage() {
                         <div className="grid md:grid-cols-3 gap-4 text-sm">
                           <div className="flex items-center">
                             <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                            <span>{reservation.date}</span>
+                            <span>{formatReservationDate(reservation.date)}</span>
                           </div>
                           <div className="flex items-center">
                             <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
                             <span>
-                              {reservation.startTime} - {reservation.endTime}
+                              {formatReservationTime(reservation.startTime)} - {formatReservationTime(reservation.endTime)}
                             </span>
                           </div>
                           <div className="flex items-center">
