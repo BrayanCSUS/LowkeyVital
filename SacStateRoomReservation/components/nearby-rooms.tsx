@@ -17,6 +17,18 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import ReserveRoom from '../app/reservations/reserve-room'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 // Sample data for nearby rooms
 const nearbyRooms = [
@@ -118,63 +130,7 @@ export default function NearbyRooms() {
               </div>
             </CardContent>
             <CardFooter className="p-4 pt-0 flex justify-end">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    className="bg-[#C4B581] text-[#00563F] hover:bg-[#C4B581]/90"
-                    onClick={() => setSelectedRoom(room)}
-                  >
-                    Reserve Room
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Reserve Room</DialogTitle>
-                    <DialogDescription>
-                      Reserve {selectedRoom?.building} {selectedRoom?.room} for your study session or meeting.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="start-time">Start Time</Label>
-                        <Input id="start-time" type="time" defaultValue="14:00" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="end-time">End Time</Label>
-                        <Input id="end-time" type="time" defaultValue="16:00" />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="purpose">Purpose</Label>
-                      <Select defaultValue="study">
-                        <SelectTrigger id="purpose">
-                          <SelectValue placeholder="Select purpose" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="study">Individual Study</SelectItem>
-                          <SelectItem value="group">Group Study</SelectItem>
-                          <SelectItem value="meeting">Club Meeting</SelectItem>
-                          <SelectItem value="project">Project Work</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="attendees">Number of Attendees</Label>
-                      <Input id="attendees" type="number" defaultValue="1" min="1" max={selectedRoom?.capacity} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="notes">Additional Notes</Label>
-                      <Input id="notes" placeholder="Any special requirements?" />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button variant="outline">Cancel</Button>
-                    <Button className="bg-[#00563F] hover:bg-[#00563F]/90">Confirm Reservation</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <ReserveRoom selectedRoom={room} />
             </CardFooter>
           </Card>
         ))}
