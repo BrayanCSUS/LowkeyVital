@@ -32,6 +32,7 @@ interface Building {
   id: number;
   name: string;
   code: string; // code like "LIB"
+  type: "academic" | "student";
   floors: number;
   rooms: number;
   availableRooms: number;
@@ -57,6 +58,8 @@ export default function HomePage() {
 
     // State and Fetch for buildings data.
     const [buildings, setBuildings] = useState<Building[]>([]);
+    // New state for selected tab
+    const [selectedTab, setSelectedTab] = useState<string>("all");
     // Fetch buildings data from JSON file on component mount.
     useEffect(() => {
       fetch("/data/buildings_data.json")
@@ -65,10 +68,15 @@ export default function HomePage() {
         .catch((err) => console.error("Failed to load buildings:", err));
     }, []);
   
-    // Filter building suggestions based on typed text.
-    const filteredBuildings = buildings.filter((b) =>
-      b.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    );    
+    // Filter building suggestions based on typed text and selected tab.
+    const filteredBuildings = buildings.filter((b) => {
+      const matchesSearch = b.name?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesTab =
+        selectedTab === "all" ||
+        (selectedTab === "academic" && b.type === "academic") ||
+        (selectedTab === "student" && b.type === "student");
+      return matchesSearch && matchesTab;
+    });    
   
     // Handle selecting a building suggestion.
     const handleSelectBuilding = (building: Building) => {
@@ -246,11 +254,10 @@ return (
           </div>*/}
           
         
-          <Tabs defaultValue="all" className="mb-8">
+          <Tabs defaultValue="all" className="mb-8" value={selectedTab} onValueChange={setSelectedTab}>
             <TabsList>
               <TabsTrigger value="all">All Buildings</TabsTrigger>
               <TabsTrigger value="academic">Academic</TabsTrigger>
-              <TabsTrigger value="admin">Administrative</TabsTrigger>
               <TabsTrigger value="student">Student Services</TabsTrigger>
             </TabsList>
           </Tabs>
