@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Building, Calendar, Clock, Download, MapPin, Trash } from "lucide-react"
+import { Building, Calendar, Clock, CircleAlert, MapPin, Trash } from "lucide-react"
 import Link from "next/link"
 import {
   Dialog,
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import Sign_In_Button from "../login/sign_in_button"
+import ReserveRoom from "./reserve-room"
 
 // Sample data for reservations
 const upcomingReservations = [
@@ -77,7 +78,114 @@ const pastReservations = [
 ]
 
 export default function ReservationsPage() {
-  const [selectedReservation, setSelectedReservation] = useState(null)
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
+  const [savedReservations, setSavedReservations] = useState<Reservation[]>([])
+  const [reserveAgainData, setReserveAgainData] = useState(null)
+  const [showReserveAgain, setShowReserveAgain] = useState(false)
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("reservations") || "[]")
+    setSavedReservations(data)
+  }, [])
+
+  // Handler to cancel a reservation
+  interface Reservation {
+    id: number | string;
+    building: string;
+    room: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    purpose: string;
+    attendees: number;
+    status?: string;
+  }
+
+  const handleCancelReservation = (reservationId: string): void => {
+    // Remove from localStorage and mark as canceled
+    const data: Reservation[] = JSON.parse(localStorage.getItem("reservations") || "[]");
+    const updated: Reservation[] = data.map((r, i) => {
+      if (`saved-${i}` === reservationId) {
+        return { ...r, status: "canceled" };
+      }
+      return r;
+    });
+    localStorage.setItem("reservations", JSON.stringify(updated));
+    setSavedReservations(updated);
+  };
+
+
+  // Helper to format date as 'Month Day, Year' or Today/Tomorrow
+  function formatReservationDate(dateStr: string) {
+    if (!dateStr) return "";
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr; // fallback for invalid date
+    const isToday = d.toDateString() === today.toDateString();
+    const isTomorrow = d.toDateString() === tomorrow.toDateString();
+    if (isToday) return "Today";
+    if (isTomorrow) return "Tomorrow";
+    return d.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+  }
+
+  // Helper to format time as 'h:mm AM/PM'
+  function formatReservationTime(time: string) {
+    if (!time) return "";
+    // If already in AM/PM format, return as is
+    if (time.match(/AM|PM/i)) return time;
+    // If in HH:mm or H:mm format
+    const [h, m] = time.split(":");
+    if (h === undefined || m === undefined) return time;
+    const date = new Date();
+    date.setHours(Number(h));
+    date.setMinutes(Number(m));
+    return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
+  }
+
+  // Helper to get capacity for a building/room (fallback to 20 if unknown)
+  const getCapacity = (building: string, room: string): number => {
+    // You can enhance this to look up real capacity from your data
+    if (building === "University Library") return 30;
+    if (building === "Mendocino Hall") return 24;
+    if (building === "Riverside Hall") return 40;
+    if (building === "Sequoia Hall") return 20;
+    if (building === "University Union") return 15;
+    return 20;
+  };
+
+
+  // Combine localStorage reservations with sample data for upcoming and past
+  const allReservations = [
+    ...savedReservations.map((r, i) => ({
+      id: `saved-${i}`,
+      ...r,
+      status: r.status || "upcoming",
+    })),
+    ...upcomingReservations.map(r => ({ ...r, status: "upcoming" })),
+    ...pastReservations.map(r => ({ ...r, status: "completed" })),
+  ]
+
+  // Split into upcoming and past for tabs
+  const now = new Date()
+  interface ReservationWithStatus extends Reservation {
+    status?: string;
+  }
+
+  const isPast = (r: ReservationWithStatus): boolean => {
+    if (!r.date) return false;
+    // Try to parse date in YYYY-MM-DD or other formats
+    const d = new Date(r.date);
+    // If the date is invalid, treat as upcoming
+    if (isNaN(d.getTime())) return false;
+    // If the date is today or in the future, it's upcoming
+    d.setHours(23, 59, 59, 999);
+    return d < now;
+  };
+  const upcoming = allReservations.filter(r => r.status === "upcoming" && !isPast(r))
+  const past = allReservations.filter(r => r.status === "completed" || (r.status !== "canceled" && isPast(r)))
+  const canceled = allReservations.filter(r => r.status === "canceled")
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -91,13 +199,10 @@ export default function ReservationsPage() {
             <Link href="/" className="text-sm font-medium hover:underline">
               Home
             </Link>
-            <Link href="/buildings" className="text-sm font-medium hover:underline">
-              Buildings
-            </Link>
             <Link href="/reservations" className="text-sm font-medium hover:underline">
               My Reservations
             </Link>
-            <Link href="/help" className="text-sm font-medium hover:underline">
+            <Link href="/Help" className="text-sm font-medium hover:underline">
               Help
             </Link>
           </nav>
@@ -128,9 +233,9 @@ export default function ReservationsPage() {
             </TabsList>
 
             <TabsContent value="upcoming" className="mt-6">
-              {upcomingReservations.length > 0 ? (
+              {upcoming.length > 0 ? (
                 <div className="grid gap-4">
-                  {upcomingReservations.map((reservation) => (
+                  {upcoming.map((reservation) => (
                     <Card key={reservation.id}>
                       <CardHeader className="p-4 pb-2">
                         <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
@@ -144,12 +249,12 @@ export default function ReservationsPage() {
                         <div className="grid md:grid-cols-3 gap-4 text-sm">
                           <div className="flex items-center">
                             <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                            <span>{reservation.date}</span>
+                            <span>{formatReservationDate(reservation.date)}</span>
                           </div>
                           <div className="flex items-center">
                             <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
                             <span>
-                              {reservation.startTime} - {reservation.endTime}
+                              {formatReservationTime(reservation.startTime)} - {formatReservationTime(reservation.endTime)}
                             </span>
                           </div>
                           <div className="flex items-center">
@@ -159,10 +264,7 @@ export default function ReservationsPage() {
                         </div>
                       </CardContent>
                       <CardFooter className="p-4 pt-2 flex flex-wrap justify-end gap-2">
-                        <Button variant="outline" size="sm">
-                          <MapPin className="h-4 w-4 mr-2" />
-                          Directions
-                        </Button>
+                        
                         <Dialog>
                           <DialogTrigger asChild>
                             <Button variant="outline" size="sm" onClick={() => setSelectedReservation(reservation)}>
@@ -184,14 +286,14 @@ export default function ReservationsPage() {
                                 </div>
                                 <div>
                                   <h4 className="font-medium text-sm">Date</h4>
-                                  <p>{selectedReservation?.date}</p>
+                                  <p>{formatReservationDate(selectedReservation?.date || "")}</p>
                                 </div>
                               </div>
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <h4 className="font-medium text-sm">Time</h4>
                                   <p>
-                                    {selectedReservation?.startTime} - {selectedReservation?.endTime}
+                                    {formatReservationTime(selectedReservation?.startTime || "")} - {formatReservationTime(selectedReservation?.endTime || "")}
                                   </p>
                                 </div>
                                 <div>
@@ -206,20 +308,20 @@ export default function ReservationsPage() {
                               <div className="border-t pt-4 mt-4">
                                 <h4 className="font-medium text-sm mb-2">Reservation Code</h4>
                                 <div className="bg-gray-100 p-3 rounded-md text-center font-mono">
-                                  SACST-{selectedReservation?.id.toString().padStart(4, "0")}
+                                  SACST-{selectedReservation?.id?.toString().padStart(4, "0")}
                                 </div>
                               </div>
                             </div>
                             <DialogFooter className="flex justify-between">
-                              <Button variant="outline" size="sm">
-                                <Download className="h-4 w-4 mr-2" />
-                                Download
+                              <Button variant="destructive" size="sm">
+                                <CircleAlert className="h-4 w-4 mr-2" />
+                                Take a Screenshot!
                               </Button>
                               <Button className="bg-[#00563F] hover:bg-[#00563F]/90">Close</Button>
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
-                        <Button variant="destructive" size="sm">
+                        <Button variant="destructive" size="sm" onClick={() => handleCancelReservation(reservation.id.toString())}>
                           <Trash className="h-4 w-4 mr-2" />
                           Cancel
                         </Button>
@@ -238,9 +340,9 @@ export default function ReservationsPage() {
             </TabsContent>
 
             <TabsContent value="past" className="mt-6">
-              {pastReservations.length > 0 ? (
+              {past.length > 0 ? (
                 <div className="grid gap-4">
-                  {pastReservations.map((reservation) => (
+                  {past.map((reservation) => (
                     <Card key={reservation.id}>
                       <CardHeader className="p-4 pb-2">
                         <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
@@ -249,6 +351,65 @@ export default function ReservationsPage() {
                           </CardTitle>
                           <Badge variant="outline" className="w-fit">
                             Completed
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="p-4 pt-0 pb-2">
+                        <div className="grid md:grid-cols-3 gap-4 text-sm">
+                          <div className="flex items-center">
+                            <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                            <span>{formatReservationDate(reservation.date)}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
+                            <span>
+                              {formatReservationTime(reservation.startTime)} - {formatReservationTime(reservation.endTime)}
+                            </span>
+                          </div>
+                          <div className="flex items-center">
+                            <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
+                            <span>Purpose: {reservation.purpose}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                      <CardFooter className="p-4 pt-2 flex flex-wrap justify-end gap-2">
+                        <Button variant="outline" size="sm">
+                          View Details
+                        </Button>
+                        <Button className="bg-[#00563F] hover:bg-[#00563F]/90" size="sm" onClick={() => {
+                          setReserveAgainData({
+                            building: reservation.building,
+                            room: reservation.room,
+                            capacity: getCapacity(reservation.building, reservation.room),
+                          });
+                          setShowReserveAgain(true);
+                        }}>
+                          Reserve Again
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Alert>
+                  <AlertTitle>No past reservations</AlertTitle>
+                  <AlertDescription>You don't have any past room reservations.</AlertDescription>
+                </Alert>
+              )}
+            </TabsContent>
+
+            <TabsContent value="canceled" className="mt-6">
+              {canceled.length > 0 ? (
+                <div className="grid gap-4">
+                  {canceled.map((reservation) => (
+                    <Card key={reservation.id}>
+                      <CardHeader className="p-4 pb-2">
+                        <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
+                          <CardTitle className="text-lg">
+                            {reservation.building} {reservation.room}
+                          </CardTitle>
+                          <Badge variant="destructive" className="w-fit">
+                            Canceled
                           </Badge>
                         </div>
                       </CardHeader>
@@ -270,34 +431,35 @@ export default function ReservationsPage() {
                           </div>
                         </div>
                       </CardContent>
-                      <CardFooter className="p-4 pt-2 flex flex-wrap justify-end gap-2">
-                        <Button variant="outline" size="sm">
-                          View Details
-                        </Button>
-                        <Button className="bg-[#00563F] hover:bg-[#00563F]/90" size="sm">
-                          Reserve Again
-                        </Button>
-                      </CardFooter>
                     </Card>
                   ))}
                 </div>
               ) : (
                 <Alert>
-                  <AlertTitle>No past reservations</AlertTitle>
-                  <AlertDescription>You don't have any past room reservations.</AlertDescription>
+                  <AlertTitle>No canceled reservations</AlertTitle>
+                  <AlertDescription>You don't have any canceled room reservations.</AlertDescription>
                 </Alert>
               )}
-            </TabsContent>
-
-            <TabsContent value="canceled" className="mt-6">
-              <Alert>
-                <AlertTitle>No canceled reservations</AlertTitle>
-                <AlertDescription>You don't have any canceled room reservations.</AlertDescription>
-              </Alert>
             </TabsContent>
           </Tabs>
         </div>
       </main>
+
+      {reserveAgainData && (
+        <ReserveRoom
+          selectedRoom={reserveAgainData}
+          open={showReserveAgain}
+          onOpenChange={(open) => {
+            setShowReserveAgain(open);
+            if (!open) setReserveAgainData(null);
+          }}
+          onSuccess={() => {
+            // Refresh reservations after successful booking
+            const data = JSON.parse(localStorage.getItem("reservations") || "[]");
+            setSavedReservations(data);
+          }}
+        />
+      )}
 
       <footer className="border-t bg-[#00563F] text-white py-6">
         <div className="container px-4">

@@ -9,6 +9,7 @@ import {useState} from "react"
 import Link from "next/link"
 import Sign_In_Button from "../login/sign_in_button"
 
+{/*}
 // Sample data for buildings
 const buildings = [
   {
@@ -21,7 +22,7 @@ const buildings = [
     availableRooms: 12,
     hours: "7:00 AM - 10:00 PM",
     features: ["Study Rooms", "Computer Labs", "Quiet Zones"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/library.jpg?height=200&width=300",
   },
   {
     id: 2,
@@ -33,7 +34,7 @@ const buildings = [
     availableRooms: 8,
     hours: "7:00 AM - 9:00 PM",
     features: ["Lecture Halls", "Computer Labs", "Faculty Offices"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/mendocino.jpg?height=200&width=300",
   },
   {
     id: 3,
@@ -45,7 +46,7 @@ const buildings = [
     availableRooms: 15,
     hours: "7:00 AM - 10:00 PM",
     features: ["Engineering Labs", "Lecture Halls", "Study Areas"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/riverside.jpg?height=200&width=300",
   },
   {
     id: 4,
@@ -57,7 +58,7 @@ const buildings = [
     availableRooms: 5,
     hours: "7:00 AM - 11:00 PM",
     features: ["Meeting Rooms", "Event Spaces", "Dining"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/UniversityUnion.jpg?height=200&width=300",
   },
   {
     id: 5,
@@ -69,7 +70,7 @@ const buildings = [
     availableRooms: 10,
     hours: "7:00 AM - 9:00 PM",
     features: ["Classrooms", "Labs", "Study Areas"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/SequoiaHall.jpg?height=200&width=300",
   },
   {
     id: 6,
@@ -81,9 +82,10 @@ const buildings = [
     availableRooms: 7,
     hours: "7:00 AM - 8:00 PM",
     features: ["Lecture Halls", "Research Labs", "Faculty Offices"],
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/PlacerHall.jpg?height=200&width=300",
   },
 ]
+  */}
 
 export default function BuildingsPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -106,7 +108,7 @@ export default function BuildingsPage() {
             <Link href="/reservations" className="text-sm font-medium hover:underline">
               My Reservations
             </Link>
-            <Link href="/help" className="text-sm font-medium hover:underline">
+            <Link href="/Help" className="text-sm font-medium hover:underline">
               Help
             </Link>
           </nav>
@@ -145,7 +147,7 @@ export default function BuildingsPage() {
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredBuildings.map((building) => (
-              <Card key={building.id} className="overflow-hidden">
+              <Card key={building.id} className="overflow-hidden flex flex-col h-full">
                 <img
                   src={building.image || "/placeholder.svg"}
                   alt={building.name}
@@ -157,7 +159,7 @@ export default function BuildingsPage() {
                     <Badge>{building.code}</Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="p-4 pt-0 pb-2">
+                <CardContent className="p-4 pt-0 pb-2 flex-grow flex flex-col">
                   <div className="grid grid-cols-2 gap-2 text-sm mb-3">
                     <div className="flex items-center">
                       <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -175,7 +177,7 @@ export default function BuildingsPage() {
                       </Badge>
                     ))}
                   </div>
-                  <div className="text-sm font-medium text-[#00563F]">
+                  <div className="text-sm font-medium text-[#00563F] mt-auto">
                     {building.availableRooms} rooms available now
                   </div>
                 </CardContent>
