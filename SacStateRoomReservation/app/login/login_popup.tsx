@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import 'reactjs-popup/dist/index.css';
 import '/styles/login_popup.css';
 import axios from 'axios';
+import { useAuth } from "@/context/AuthContext"; // Import useAuth
 
 interface LoginPopupProps {
     open: boolean;
@@ -12,6 +13,7 @@ interface LoginPopupProps {
 }
 
 const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
+    const { login } = useAuth(); // Get the login function from the auth context
     const [email, setEmail] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isEmailSubmitted, setIsEmailSubmitted] = useState(false);
@@ -45,6 +47,8 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
         try {
             const response = await axios.post('http://localhost:5000/verify-code', { code: verifyCode });
             console.log(response.data.message);
+            // On successful verification, update auth state:
+            login({ email }); 
             onClose(); // Close the popup if verification is successful
         } catch (error) {
             console.error('Error verifying code:', error);
