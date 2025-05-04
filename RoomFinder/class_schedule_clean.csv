@@ -1,4 +1,4 @@
-building_name,building,room,days,start,end
+building,code,room,days,start,end
 Alpine Hall,ALP,236,TR,1200,1315
 Alpine Hall,ALP,236,TR,1330,1445
 Alpine Hall,ALP,236,TR,1630,1745

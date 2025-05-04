@@ -11,7 +11,7 @@ import RoomMap from "@/components/room-map"
 import NearbyRooms from "@/components/nearby-rooms"
 import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useEffect } from "react"
 
 import {
@@ -40,13 +40,16 @@ interface Building {
   image: string;
 }
 
-// Sample rooms for demonstration purposes.
-// In your real app each building might have its own room list.
-const sampleRooms = [
-  { id: 1, roomNumber: "101", name: "Room 101" },
-  { id: 2, roomNumber: "102", name: "Room 102" },
-  { id: 3, roomNumber: "103", name: "Room 103" },
-]
+/// Rooms interface to define the structure of room data.
+interface Room {
+  id: number; 
+  building: string; 
+  roomNumber: string; 
+  distance: string; 
+  capacity: number; 
+  features: string[]; 
+  availableUntil: string; 
+}
 
 export default function HomePage() {
     // New state for search, selected building, and whether to show rooms list.
@@ -54,9 +57,10 @@ export default function HomePage() {
     const [selectedBuilding, setSelectedBuilding] =  useState<Building | null>(null)
     const [showRooms, setShowRooms] = useState(false)
     const [showNearbyRooms, setShowNearbyRooms] = useState(false)
-
-    // State and Fetch for buildings data.
     const [buildings, setBuildings] = useState<Building[]>([]);
+    const [rooms, setRooms] = useState<Room[]>([])
+    const [selectedRoomDetails, setSelectedRoomDetails] = useState<Room | null>(null);
+
     // Fetch buildings data from JSON file on component mount.
     useEffect(() => {
       fetch("/data/buildings_data.json")
@@ -65,6 +69,37 @@ export default function HomePage() {
         .catch((err) => console.error("Failed to load buildings:", err));
     }, []);
   
+    // Fetch room data based on the selected building's code.
+    useEffect(() => {
+      if (!selectedBuilding) {
+        console.log("No building selected.");
+        return;
+      }
+      console.log("Selected Building:", selectedBuilding.code);
+      fetch("/data/room_availability.json")
+        .then((res) => res.json())
+        .then((data) => {
+          const buildingRooms = data[selectedBuilding.code];
+          if (buildingRooms) {
+            const roomList = Object.keys(buildingRooms).map((roomNumber) => ({
+              id: buildingRooms[roomNumber].id || Math.random(), // Placeholder for unique ID
+              building: selectedBuilding.name,
+              roomNumber,
+              distance: buildingRooms[roomNumber].distance || "Unknown distance", // Placeholder for distance
+              capacity: buildingRooms[roomNumber].capacity || 0, // Placeholder for capacity
+              features: buildingRooms[roomNumber].features || ["No features available"], // Placeholder for features
+              availableUntil: buildingRooms[roomNumber].availableUntil || "Unknown time", // Placeholder for availability
+            }));
+            console.log("Room List:", roomList);
+            setRooms(roomList);
+          } else {
+            console.log("No rooms found for this building.");
+            setRooms([]);
+          }
+        })
+        .catch((err) => console.error("Failed to load room data:", err));
+    }, [selectedBuilding]);
+
     // Filter building suggestions based on typed text.
     const filteredBuildings = buildings.filter((b) =>
       b.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -72,6 +107,7 @@ export default function HomePage() {
   
     // Handle selecting a building suggestion.
     const handleSelectBuilding = (building: Building) => {
+      console.log("Selected Building:", building);
       setSelectedBuilding(building)
       setSearchTerm(building.name)
     }
@@ -85,11 +121,10 @@ export default function HomePage() {
         alert("Please select a building from the suggestions.")
       }
     }
-    const sampleRooms = [
-      { id: 1, roomNumber: "101", name: "Room 101" },
-      { id: 2, roomNumber: "102", name: "Room 102" },
-      { id: 3, roomNumber: "103", name: "Room 103" },
-    ]
+
+    const handleViewDetails = (room: Room) => {
+      setSelectedRoomDetails(room);
+    };
   
 return (
     <div className="flex min-h-screen flex-col">
@@ -171,20 +206,24 @@ return (
                   <h2 className="mb-2 text-lg font-bold">
                     Rooms in {selectedBuilding.name}
                   </h2>
-                  {sampleRooms.map((room) => (
-                    <div
-                      key={room.id}
-                      className="flex items-center justify-between border-b py-2 last:border-0"
-                    >
-                      <div>
-                        <p className="font-medium">{room.name}</p>
-                        <p className="text-xs text-gray-600">Room {room.roomNumber}</p>
+                  {rooms.length > 0 ? (
+                    rooms.map((room) => (
+                      <div
+                        key={room.id}
+                        className="flex items-center justify-between border-b py-2 last:border-0"
+                      >
+                        <div>
+                          <p className="font-medium">{room.name}</p>
+                          <p className="text-xs text-gray-600">Room {room.roomNumber}</p>
+                        </div>
+                        <Button variant="outline" size="sm" onClick={() => handleViewDetails(room)}>
+                          View Details
+                        </Button>
                       </div>
-                      <Button variant="outline" size="sm">
-                        View Details
-                      </Button>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-600">No rooms available for this building.</p>
+                  )}
                 </div>
               )}
             </div>
@@ -356,6 +395,23 @@ return (
           <NearbyRooms />
         </DialogContent>
       </Dialog>
+      {selectedRoomDetails && (
+        <Dialog open={!!selectedRoomDetails} onOpenChange={() => setSelectedRoomDetails(null)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Room Details</DialogTitle>
+              <DialogDescription>
+                <p><strong>Room Number:</strong> {selectedRoomDetails.roomNumber}</p>
+                <p><strong>Building:</strong> {selectedRoomDetails.building}</p>
+                <p><strong>Distance:</strong> {selectedRoomDetails.distance}</p>
+                <p><strong>Capacity:</strong> {selectedRoomDetails.capacity}</p>
+                <p><strong>Features:</strong> {selectedRoomDetails.features.join(", ")}</p>
+                <p><strong>Available Until:</strong> {selectedRoomDetails.availableUntil}</p>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      )}
       <footer className="border-t bg-[#00563F] text-white py-6">
         <div className="container px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
