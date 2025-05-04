@@ -84,6 +84,14 @@ Open your web browser and go to the address provided in the terminal output (usu
 
 5. Turn on the Email Server (optional)
 
+Check the General text channel of the group Discord and checked the pinned messages for the API key and domain.
+
+Navigate to LowkeyVital/SacStateRoomReservation/app/backend/.env
+
+Copy and paste the text value of the API key and domain into the .env file
+
+Save and exit
+
 Create a new terminal/command prompt instance, navigate to the project repository
 ```
 cd LowkeyVital/SacStateRoomReservation/app/backend
