@@ -310,13 +310,19 @@ return (
                 </CardContent>
                 <CardFooter className="p-4 pt-2 flex justify-between">
                   <Button variant="outline">View Details</Button>
-                  <Button
-                    className="bg-[#00563F] hover:bg-[#00563F]/90"
-                    onClick={() => setShowNearbyRooms(true)}
-                  >
-                    Find Rooms
-                  </Button>
-                </CardFooter>
+                 <Button
+                   className="bg-[#00563F] hover:bg-[#00563F]/90"
+                   onClick={() => {
+                    if (!user) {
+                    alert("Please sign in to reserve a room.")
+                     } else {
+                    setShowNearbyRooms(true)
+                  }
+          }}
+  >
+    Find Rooms
+  </Button>
+</CardFooter>
               </Card>
             ))}
           </div>
