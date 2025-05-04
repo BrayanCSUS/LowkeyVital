@@ -13,7 +13,9 @@ import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useEffect } from "react"
-
+import { fetchRoomsForBuilding } from "../lib/utils";
+import { Room } from "../lib/types";
+console.log(fetchRoomsForBuilding); // Should log the function definition
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,7 +28,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-
 // Building interface to define the structure of building data.
 interface Building {
   id: number;
@@ -38,17 +39,6 @@ interface Building {
   hours: string;
   features: string[];
   image: string;
-}
-
-/// Rooms interface to define the structure of room data.
-interface Room {
-  id: number; 
-  building: string; 
-  roomNumber: string; 
-  distance: string; 
-  capacity: number; 
-  features: string[]; 
-  availableUntil: string; 
 }
 
 export default function HomePage() {
@@ -71,33 +61,14 @@ export default function HomePage() {
   
     // Fetch room data based on the selected building's code.
     useEffect(() => {
-      if (!selectedBuilding) {
-        console.log("No building selected.");
-        return;
-      }
+      if (!selectedBuilding) return;
       console.log("Selected Building:", selectedBuilding.code);
-      fetch("/data/room_availability.json")
-        .then((res) => res.json())
-        .then((data) => {
-          const buildingRooms = data[selectedBuilding.code];
-          if (buildingRooms) {
-            const roomList = Object.keys(buildingRooms).map((roomNumber) => ({
-              id: buildingRooms[roomNumber].id || Math.random(), // Placeholder for unique ID
-              building: selectedBuilding.name,
-              roomNumber,
-              distance: buildingRooms[roomNumber].distance || "Unknown distance", // Placeholder for distance
-              capacity: buildingRooms[roomNumber].capacity || 0, // Placeholder for capacity
-              features: buildingRooms[roomNumber].features || ["No features available"], // Placeholder for features
-              availableUntil: buildingRooms[roomNumber].availableUntil || "Unknown time", // Placeholder for availability
-            }));
-            console.log("Room List:", roomList);
-            setRooms(roomList);
-          } else {
-            console.log("No rooms found for this building.");
-            setRooms([]);
-          }
+      fetchRoomsForBuilding(selectedBuilding)
+        .then((roomList) => {
+          console.log("Room List:", roomList);
+          setRooms(roomList);
         })
-        .catch((err) => console.error("Failed to load room data:", err));
+        .catch((err) => console.error("Error fetching rooms:", err));
     }, [selectedBuilding]);
 
     // Filter building suggestions based on typed text.
@@ -336,7 +307,11 @@ return (
                   <Button variant="outline">View Details</Button>
                   <Button
                     className="bg-[#00563F] hover:bg-[#00563F]/90"
-                    onClick={() => setShowNearbyRooms(true)}
+                    onClick={() => {
+                      console.log("Selected Building:", building); // Log the selected building
+                      setSelectedBuilding(building); // Set the selected building
+                      setShowNearbyRooms(true); // Open the NearbyRooms dialog
+                    }}
                   >
                     Find Rooms
                   </Button>
@@ -392,7 +367,7 @@ return (
       </main>
       <Dialog open={showNearbyRooms} onOpenChange={setShowNearbyRooms}>
         <DialogContent className="max-w-2xl w-full">
-          <NearbyRooms />
+          <NearbyRooms selectedBuilding={selectedBuilding} />
         </DialogContent>
       </Dialog>
       {selectedRoomDetails && (
