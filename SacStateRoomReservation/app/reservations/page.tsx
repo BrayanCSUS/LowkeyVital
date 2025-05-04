@@ -226,7 +226,7 @@ export default function ReservationsPage() {
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-            <Sign_In_Button />
+            { !user && <Sign_In_Button /> }
           </div>
         </div>
       </header>
