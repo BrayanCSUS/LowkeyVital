@@ -35,7 +35,7 @@
     "id": 3,
     "floors": 3,
     "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "hours": "12:00 AM - 11:59 PM",
     "features": [
       "Computer Labs",
       "Information Resources & Technology (IRT)",

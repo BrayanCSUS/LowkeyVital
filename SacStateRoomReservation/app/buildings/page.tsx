@@ -147,7 +147,7 @@ export default function BuildingsPage() {
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredBuildings.map((building) => (
-              <Card key={building.id} className="overflow-hidden">
+              <Card key={building.id} className="overflow-hidden flex flex-col h-full">
                 <img
                   src={building.image || "/placeholder.svg"}
                   alt={building.name}
@@ -159,7 +159,7 @@ export default function BuildingsPage() {
                     <Badge>{building.code}</Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="p-4 pt-0 pb-2">
+                <CardContent className="p-4 pt-0 pb-2 flex-grow flex flex-col">
                   <div className="grid grid-cols-2 gap-2 text-sm mb-3">
                     <div className="flex items-center">
                       <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -177,7 +177,7 @@ export default function BuildingsPage() {
                       </Badge>
                     ))}
                   </div>
-                  <div className="text-sm font-medium text-[#00563F]">
+                  <div className="text-sm font-medium text-[#00563F] mt-auto">
                     {building.availableRooms} rooms available now
                   </div>
                 </CardContent>
