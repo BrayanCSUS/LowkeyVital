@@ -5,8 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { HelpCircle, Info, Search, MapPin, Mail, Phone, User } from "lucide-react"
 import Sign_In_Button from "../login/sign_in_button"
+import { useAuth } from "@/context/AuthContext"
 
 export default function HelpPage() {
+  const { user } = useAuth();
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-10 border-b bg-[#00563F] text-white">
@@ -21,7 +23,7 @@ export default function HelpPage() {
             <Link href="/Help" className="text-sm font-medium hover:underline">Help</Link>
           </nav>
           <div className="flex items-center gap-4">
-            <Sign_In_Button />
+          { !user && <Sign_In_Button /> }
           </div>
         </div>
       </header>

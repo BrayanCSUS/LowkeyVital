@@ -1,3 +1,5 @@
+// app/page.tsx
+//home page
 "use client"
 import { useState } from "react"
 import Link from "next/link"
@@ -13,6 +15,7 @@ import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { useEffect } from "react"
+import { useAuth } from "@/context/AuthContext"
 
 import {
   AlertDialog,
@@ -84,15 +87,21 @@ export default function HomePage() {
       setSearchTerm(building.name)
     }
   
-    // Handle click of the "Find Nearby Rooms" button.
+      // Update handleFindRooms: only allow if user is logged in.
+    const { user } = useAuth()
+
     const handleFindRooms = () => {
-      if (selectedBuilding) {
-        setShowRooms(true)
-      } else {
-        // Optionally, you could show an error message if no building is selected.
-        alert("Please select a building from the suggestions.")
-      }
+    if (!user) {
+      alert("Please sign in to reserve a room.")
+      return
     }
+    if (selectedBuilding) {
+      setShowRooms(true)
+    } else {
+      alert("Please select a building from the suggestions.")
+    }
+  }
+
     const sampleRooms = [
       { id: 1, roomNumber: "101", name: "Room 101" },
       { id: 2, roomNumber: "102", name: "Room 102" },
@@ -119,7 +128,7 @@ return (
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-            <Sign_In_Button />
+          { !user && <Sign_In_Button /> }
           </div>
         </div>
       </header>
@@ -188,9 +197,15 @@ return (
                         <p className="font-medium">{room.name}</p>
                         <p className="text-xs text-gray-600">Room {room.roomNumber}</p>
                       </div>
-                      <Button variant="outline" size="sm">
-                        View Details
-                      </Button>
+                      {user ? (
+                        <Button variant="outline" size="sm">
+                          View Details
+                        </Button>
+                      ) : (
+                        <Button variant="outline" size="sm" disabled>
+                          Sign in to view details
+                        </Button>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -302,13 +317,19 @@ return (
                 </CardContent>
                 <CardFooter className="p-4 pt-2 flex justify-between">
                   <Button variant="outline">View Details</Button>
-                  <Button
-                    className="bg-[#00563F] hover:bg-[#00563F]/90"
-                    onClick={() => setShowNearbyRooms(true)}
-                  >
-                    Find Rooms
-                  </Button>
-                </CardFooter>
+                 <Button
+                   className="bg-[#00563F] hover:bg-[#00563F]/90"
+                   onClick={() => {
+                    if (!user) {
+                    alert("Please sign in to reserve a room.")
+                     } else {
+                    setShowNearbyRooms(true)
+                  }
+          }}
+  >
+    Find Rooms
+  </Button>
+</CardFooter>
               </Card>
             ))}
           </div>
