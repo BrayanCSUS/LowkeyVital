@@ -10,7 +10,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/AlpineHall.jpg?height=200&width=300"
   },
   {
     "building": "AMD",
@@ -23,7 +23,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/AmadorHall.jpg?height=200&width=300"
   },
   {
     "building": "ARC",
@@ -36,7 +36,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/AiRC.jpg?height=200&width=300"
   },
   {
     "building": "ART",
@@ -49,7 +49,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/ArtSculptureLab.jpg?height=200&width=300"
   },
   {
     "building": "BNC",
@@ -62,7 +62,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/BeniciaHall.jpg?height=200&width=300"
   },
   {
     "building": "BRH",
@@ -75,7 +75,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/BrightonHall.jpg?height=200&width=300"
   },
   {
     "building": "CLV",
@@ -88,7 +88,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/CalaverasHall.jpg?height=200&width=300"
   },
   {
     "building": "CPS",
@@ -101,7 +101,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/CapistranoHall.jpg?height=200&width=300"
   },
   {
     "building": "DH",
@@ -114,7 +114,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/DouglassHall.jpg?height=200&width=300"
   },
   {
     "building": "DLN",
@@ -127,7 +127,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/DelNorteHall.jpg?height=200&width=300"
   },
   {
     "building": "EUR",
@@ -140,7 +140,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/EurekaHall.jpg?height=200&width=300"
   },
   {
     "building": "FLS",
@@ -153,7 +153,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/FolsomHall.jpg?height=200&width=300"
   },
   {
     "building": "HMB",
@@ -166,7 +166,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/HumboldtHall.jpg?height=200&width=300"
   },
   {
     "building": "KDM",
@@ -179,7 +179,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/KademaHall.jpg?height=200&width=300"
   },
   {
     "building": "LIB",
@@ -205,7 +205,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/LassenHall.jpg?height=200&width=300"
   },
   {
     "building": "MND",
@@ -231,7 +231,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/MariposaHall.jpg?height=200&width=300"
   },
   {
     "building": "PLR",
@@ -270,7 +270,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/ShastaHall.jpg?height=200&width=300"
   },
   {
     "building": "SLN",
@@ -283,7 +283,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/SolanoHall.jpg?height=200&width=300"
   },
   {
     "building": "SQU",
@@ -309,7 +309,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/StudioTheatre.jpg?height=200&width=300"
   },
   {
     "building": "TAH",
@@ -322,7 +322,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/TahoeHall.jpg?height=200&width=300"
   },
   {
     "building": "TEB",
@@ -335,7 +335,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/TEB.jpg?height=200&width=300"
   },
   {
     "building": "TSC",
@@ -348,7 +348,7 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/TschannenScienceComplex.jpg?height=200&width=300"
   },
   {
     "building": "YSM",
@@ -361,6 +361,6 @@
     "features": [
       "Classrooms"
     ],
-    "image": "/images/placeholder.jpg?height=200&width=300"
+    "image": "/images/YosemiteHall.jpg?height=200&width=300"
   }
 ]
