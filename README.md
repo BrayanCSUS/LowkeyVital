@@ -82,6 +82,26 @@ This command will start the application and make it accessible in your web brows
 
 Open your web browser and go to the address provided in the terminal output (usually http://localhost:3000). You should now see the SacState Room Reservation application running!
 
+5. Turn on the Email Server (optional)
+
+Check the General text channel of the group Discord and checked the pinned messages for the API key and domain.
+
+Navigate to LowkeyVital/SacStateRoomReservation/app/backend/.env
+
+Copy and paste the text value of the API key and domain into the .env file
+
+Save and exit
+
+Create a new terminal/command prompt instance, navigate to the project repository
+```
+cd LowkeyVital/SacStateRoomReservation/app/backend
+```
+Run the following command
+```
+node email_server.js
+```
+The email verification server will now be running
+
 ## Contributing
 
 - **_Commit Frequently_**: Commit your changes regularly with clear and concise messages.
