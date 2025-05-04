@@ -28,7 +28,7 @@ app.post('/send-email', (req, res) => {
     verificationCode = generateVerificationCode();
 
     const data = {
-        from: 'CSUS Room Finder <LowkeyVital@sandbox39db97213a4c49df8b03aab8956cdfa0.mailgun.org>',
+        from: 'CSUS Room Finder <LowkeyVital@sandboxc1d80db7c6194c6fa4f585fe1ef47ce9.mailgun.org>',
         to: email,
         subject: 'Verification Code',
         text: `Your verification code is: ${verificationCode}`,
