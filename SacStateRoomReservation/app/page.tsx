@@ -35,6 +35,7 @@ interface Building {
   id: number;
   name: string;
   code: string; // code like "LIB"
+  type: "academic" | "student";
   floors: number;
   rooms: number;
   availableRooms: number;
@@ -60,6 +61,8 @@ export default function HomePage() {
 
     // State and Fetch for buildings data.
     const [buildings, setBuildings] = useState<Building[]>([]);
+    // New state for selected tab
+    const [selectedTab, setSelectedTab] = useState<string>("all");
     // Fetch buildings data from JSON file on component mount.
     useEffect(() => {
       fetch("/data/buildings_data.json")
@@ -68,10 +71,15 @@ export default function HomePage() {
         .catch((err) => console.error("Failed to load buildings:", err));
     }, []);
   
-    // Filter building suggestions based on typed text.
-    const filteredBuildings = buildings.filter((b) =>
-      b.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    );    
+    // Filter building suggestions based on typed text and selected tab.
+    const filteredBuildings = buildings.filter((b) => {
+      const matchesSearch = b.name?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesTab =
+        selectedTab === "all" ||
+        (selectedTab === "academic" && b.type === "academic") ||
+        (selectedTab === "student" && b.type === "student");
+      return matchesSearch && matchesTab;
+    });    
   
     // Handle selecting a building suggestion.
     const handleSelectBuilding = (building: Building) => {
@@ -261,11 +269,10 @@ return (
           </div>*/}
           
         
-          <Tabs defaultValue="all" className="mb-8">
+          <Tabs defaultValue="all" className="mb-8" value={selectedTab} onValueChange={setSelectedTab}>
             <TabsList>
               <TabsTrigger value="all">All Buildings</TabsTrigger>
               <TabsTrigger value="academic">Academic</TabsTrigger>
-              <TabsTrigger value="admin">Administrative</TabsTrigger>
               <TabsTrigger value="student">Student Services</TabsTrigger>
             </TabsList>
           </Tabs>
@@ -274,7 +281,7 @@ return (
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredBuildings.map((building) => (
-              <Card key={building.id} className="overflow-hidden">
+              <Card key={building.id} className="overflow-hidden flex flex-col h-full">
                 <img
                   src={building.image || "/placeholder.svg"}
                   alt={building.name}
@@ -283,10 +290,10 @@ return (
                 <CardHeader className="p-4 pb-2">
                   <div className="flex justify-between items-start">
                     <CardTitle className="text-xl">{building.name}</CardTitle>
-                    <Badge>{building.code}</Badge>
+                    <Badge variant="default">{building.code}</Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="p-4 pt-0 pb-2">
+                <CardContent className="p-4 pt-0 pb-2 flex-grow flex flex-col">
                   <div className="grid grid-cols-2 gap-2 text-sm mb-3">
                     <div className="flex items-center">
                       <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -304,7 +311,7 @@ return (
                       </Badge>
                     ))}
                   </div>
-                  <div className="text-sm font-medium text-[#00563F]">
+                  <div className="text-sm font-medium text-[#00563F] mt-auto">
                     {building.availableRooms} rooms available now
                   </div>
                 </CardContent>
