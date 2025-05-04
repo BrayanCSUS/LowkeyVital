@@ -37,6 +37,8 @@
     "availableRooms": 0,
     "hours": "7:00 AM - 10:00 PM",
     "features": [
+      "Computer Labs",
+      "Information Resources & Technology (IRT)",
       "Classrooms"
     ],
     "image": "/images/AiRC.jpg?height=200&width=300"
@@ -177,6 +179,7 @@
     "availableRooms": 0,
     "hours": "7:00 AM - 10:00 PM",
     "features": [
+      "Biology Labs",
       "Classrooms"
     ],
     "image": "/images/HumboldtHall.jpg?height=200&width=300"
@@ -205,6 +208,8 @@
     "availableRooms": 0,
     "hours": "7:00 AM - 10:00 PM",
     "features": [
+      "Equipment Checkout",
+      "Open Study Areas",
       "Classrooms"
     ],
     "image": "/images/LIB.jpg?height=200&width=300"
@@ -219,6 +224,7 @@
     "availableRooms": 0,
     "hours": "7:00 AM - 10:00 PM",
     "features": [
+      "Peer and Academic Resource Center (PARC)",
       "Classrooms"
     ],
     "image": "/images/LassenHall.jpg?height=200&width=300"
@@ -275,6 +281,7 @@
     "availableRooms": 0,
     "hours": "7:00 AM - 10:00 PM",
     "features": [
+      "Computer Labs",
       "Classrooms"
     ],
     "image": "/images/RVR.jpg?height=200&width=300"
@@ -359,6 +366,8 @@
     "availableRooms": 0,
     "hours": "7:00 AM - 10:00 PM",
     "features": [
+      "Engineering Labs",
+      "MESA Center",
       "Classrooms"
     ],
     "image": "/images/TEB.jpg?height=200&width=300"
