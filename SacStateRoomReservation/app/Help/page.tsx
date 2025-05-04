@@ -18,7 +18,7 @@ export default function HelpPage() {
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/" className="text-sm font-medium hover:underline">Home</Link>
             <Link href="/reservations" className="text-sm font-medium hover:underline">My Reservations</Link>
-            <Link href="/help" className="text-sm font-medium hover:underline">Help</Link>
+            <Link href="/Help" className="text-sm font-medium hover:underline">Help</Link>
           </nav>
           <div className="flex items-center gap-4">
             <Sign_In_Button />

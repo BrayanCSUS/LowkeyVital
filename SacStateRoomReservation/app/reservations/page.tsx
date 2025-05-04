@@ -202,7 +202,7 @@ export default function ReservationsPage() {
             <Link href="/reservations" className="text-sm font-medium hover:underline">
               My Reservations
             </Link>
-            <Link href="/help" className="text-sm font-medium hover:underline">
+            <Link href="/Help" className="text-sm font-medium hover:underline">
               Help
             </Link>
           </nav>
