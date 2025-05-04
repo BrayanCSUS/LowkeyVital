@@ -275,7 +275,7 @@ return (
                 <CardHeader className="p-4 pb-2">
                   <div className="flex justify-between items-start">
                     <CardTitle className="text-xl">{building.name}</CardTitle>
-                    <Badge>{building.code}</Badge>
+                    <Badge variant="default">{building.code}</Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="p-4 pt-0 pb-2 flex-grow flex flex-col">

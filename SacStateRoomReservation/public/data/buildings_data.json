@@ -1,6 +1,6 @@
 [
   {
-    "building": "ALP",
+    "code": "ALP",
     "rooms": 17,
     "name": "Alpine Hall",
     "type": "academic",
@@ -14,7 +14,7 @@
     "image": "/images/AlpineHall.jpg?height=200&width=300"
   },
   {
-    "building": "AMD",
+    "code": "AMD",
     "rooms": 21,
     "name": "Amador Hall",
     "type": "academic",
@@ -28,14 +28,14 @@
     "image": "/images/AmadorHall.jpg?height=200&width=300"
   },
   {
-    "building": "ARC",
+    "code": "ARC",
     "rooms": 12,
     "name": "Academic Information Resource Center",
     "type": "student",
     "id": 3,
     "floors": 3,
     "availableRooms": 0,
-    "hours": "12:00 AM - 11:59 PM",
+    "hours": "12:00 AM - 11:00 PM",
     "features": [
       "Computer Labs",
       "Information Resources & Technology (IRT)",
@@ -44,7 +44,7 @@
     "image": "/images/AiRC.jpg?height=200&width=300"
   },
   {
-    "building": "ART",
+    "code": "ART",
     "rooms": 3,
     "name": "Art Sculpture Lab",
     "type": "academic",
@@ -58,7 +58,7 @@
     "image": "/images/ArtSculptureLab.jpg?height=200&width=300"
   },
   {
-    "building": "BNC",
+    "code": "BNC",
     "rooms": 2,
     "name": "Benicia Hall",
     "type": "academic",
@@ -72,7 +72,7 @@
     "image": "/images/BeniciaHall.jpg?height=200&width=300"
   },
   {
-    "building": "BRH",
+    "code": "BRH",
     "rooms": 18,
     "name": "Brighton Hall",
     "type": "academic",
@@ -86,7 +86,7 @@
     "image": "/images/BrightonHall.jpg?height=200&width=300"
   },
   {
-    "building": "CLV",
+    "code": "CLV",
     "rooms": 5,
     "name": "Calaveras Hall",
     "type": "academic",
@@ -100,7 +100,7 @@
     "image": "/images/CalaverasHall.jpg?height=200&width=300"
   },
   {
-    "building": "CPS",
+    "code": "CPS",
     "rooms": 14,
     "name": "Capistrano Hall",
     "type": "academic",
@@ -114,7 +114,7 @@
     "image": "/images/CapistranoHall.jpg?height=200&width=300"
   },
   {
-    "building": "DH",
+    "code": "DH",
     "rooms": 13,
     "name": "Douglass Hall",
     "type": "academic",
@@ -128,7 +128,7 @@
     "image": "/images/DouglassHall.jpg?height=200&width=300"
   },
   {
-    "building": "DLN",
+    "code": "DLN",
     "rooms": 3,
     "name": "Del Norte Hall",
     "type": "academic",
@@ -142,7 +142,7 @@
     "image": "/images/DelNorteHall.jpg?height=200&width=300"
   },
   {
-    "building": "EUR",
+    "code": "EUR",
     "rooms": 28,
     "name": "Eureka Hall",
     "type": "academic",
@@ -156,7 +156,7 @@
     "image": "/images/EurekaHall.jpg?height=200&width=300"
   },
   {
-    "building": "FLS",
+    "code": "FLS",
     "rooms": 18,
     "name": "Folsom Hall",
     "type": "academic",
@@ -170,7 +170,7 @@
     "image": "/images/FolsomHall.jpg?height=200&width=300"
   },
   {
-    "building": "HMB",
+    "code": "HMB",
     "rooms": 6,
     "name": "Humboldt Hall",
     "type": "academic",
@@ -185,7 +185,7 @@
     "image": "/images/HumboldtHall.jpg?height=200&width=300"
   },
   {
-    "building": "KDM",
+    "code": "KDM",
     "rooms": 15,
     "name": "Kadema Hall",
     "type": "academic",
@@ -199,7 +199,7 @@
     "image": "/images/KademaHall.jpg?height=200&width=300"
   },
   {
-    "building": "LIB",
+    "code": "LIB",
     "rooms": 9,
     "name": "Library",
     "type": "student",
@@ -215,7 +215,7 @@
     "image": "/images/LIB.jpg?height=200&width=300"
   },
   {
-    "building": "LSN",
+    "code": "LSN",
     "rooms": 1,
     "name": "Lassen Hall",
     "type": "academic",
@@ -230,7 +230,7 @@
     "image": "/images/LassenHall.jpg?height=200&width=300"
   },
   {
-    "building": "MND",
+    "code": "MND",
     "rooms": 31,
     "name": "Mendocino Hall",
     "type": "academic",
@@ -244,7 +244,7 @@
     "image": "/images/MND.jpg?height=200&width=300"
   },
   {
-    "building": "MRP",
+    "code": "MRP",
     "rooms": 23,
     "name": "Mariposa Hall",
     "type": "academic",
@@ -258,7 +258,7 @@
     "image": "/images/MariposaHall.jpg?height=200&width=300"
   },
   {
-    "building": "PLR",
+    "code": "PLR",
     "rooms": 3,
     "name": "Placer Hall",
     "type": "academic",
@@ -272,7 +272,7 @@
     "image": "/images/PLR.jpg?height=200&width=300"
   },
   {
-    "building": "RVR",
+    "code": "RVR",
     "rooms": 25,
     "name": "Riverside Hall",
     "type": "academic",
@@ -287,7 +287,7 @@
     "image": "/images/RVR.jpg?height=200&width=300"
   },
   {
-    "building": "SHS",
+    "code": "SHS",
     "rooms": 11,
     "name": "Shasta Hall",
     "type": "academic",
@@ -301,7 +301,7 @@
     "image": "/images/ShastaHall.jpg?height=200&width=300"
   },
   {
-    "building": "SLN",
+    "code": "SLN",
     "rooms": 17,
     "name": "Solano Hall",
     "type": "academic",
@@ -315,7 +315,7 @@
     "image": "/images/SolanoHall.jpg?height=200&width=300"
   },
   {
-    "building": "SQU",
+    "code": "SQU",
     "rooms": 38,
     "name": "Sequoia Hall",
     "type": "academic",
@@ -329,7 +329,7 @@
     "image": "/images/SQU.jpg?height=200&width=300"
   },
   {
-    "building": "STH",
+    "code": "STH",
     "rooms": 1,
     "name": "Studio Theatre",
     "type": "academic",
@@ -343,7 +343,7 @@
     "image": "/images/StudioTheatre.jpg?height=200&width=300"
   },
   {
-    "building": "TAH",
+    "code": "TAH",
     "rooms": 8,
     "name": "Tahoe Hall",
     "type": "academic",
@@ -357,7 +357,7 @@
     "image": "/images/TahoeHall.jpg?height=200&width=300"
   },
   {
-    "building": "TEB",
+    "code": "TEB",
     "rooms": 12,
     "name": "Tschannen Engineering Building",
     "type": "academic",
@@ -373,7 +373,7 @@
     "image": "/images/TEB.jpg?height=200&width=300"
   },
   {
-    "building": "TSC",
+    "code": "TSC",
     "rooms": 22,
     "name": "Tschannen Science Complex",
     "type": "academic",
@@ -387,7 +387,7 @@
     "image": "/images/TschannenScienceComplex.jpg?height=200&width=300"
   },
   {
-    "building": "YSM",
+    "code": "YSM",
     "rooms": 10,
     "name": "Yosemite Hall",
     "type": "academic",
