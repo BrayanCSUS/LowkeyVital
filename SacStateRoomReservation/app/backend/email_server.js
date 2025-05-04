@@ -13,6 +13,7 @@ const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MA
 
 // In-memory storage for the verification code
 let verificationCode = null;
+let logged_In = false; // Variable to track login status
 
 // Function to generate a random 5-digit code
 const generateVerificationCode = () => {
@@ -27,7 +28,7 @@ app.post('/send-email', (req, res) => {
     verificationCode = generateVerificationCode();
 
     const data = {
-        from: 'CSUS Room Finder <LowkeyVital@sandbox39db97213a4c49df8b03aab8956cdfa0.mailgun.orgm>',
+        from: 'CSUS Room Finder <LowkeyVital@sandbox39db97213a4c49df8b03aab8956cdfa0.mailgun.org>',
         to: email,
         subject: 'Verification Code',
         text: `Your verification code is: ${verificationCode}`,
@@ -48,12 +49,36 @@ app.post('/verify-code', (req, res) => {
     const { code } = req.body;
 
     if (code === verificationCode) {
-        res.status(200).json({ message: 'Verification successful' });
+        logged_In = true; // Set logged_In to true on successful verification
+        res.status(200).json({ message: 'Verification successful', logged_In });
     } else {
         res.status(400).json({ message: 'Invalid verification code' });
     }
 });
 
+// New endpoint to get the logged-in status
+app.get('/logged-in-status', (req, res) => {
+    res.status(200).json({ logged_In });
+});
+
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+/* Typescript program to import the login status
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const fetchLoggedInStatus = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/logged-in-status');
+                const data = await response.json();
+                setLoggedIn(data.logged_In);
+            } catch (error) {
+                console.error('Error fetching logged-in status:', error);
+            }
+        };
+
+        fetchLoggedInStatus();
+    }, []);
+*/
