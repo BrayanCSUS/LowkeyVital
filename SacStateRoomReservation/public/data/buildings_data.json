@@ -38,8 +38,9 @@
     "hours": "12:00 AM - 11:00 PM",
     "features": [
       "Computer Labs",
-      "Information Resources & Technology (IRT)",
-      "Classrooms"
+      "Classrooms",
+      "Information Resources & Technology (IRT)"
+      
     ],
     "image": "/images/AiRC.jpg?height=200&width=300"
   },

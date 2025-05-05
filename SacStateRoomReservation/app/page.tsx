@@ -366,31 +366,28 @@ return (
                       </Badge>
                     ))}
                   </div>
-                  <div className="text-sm font-medium text-[#00563F] mt-auto">
+                </CardContent>
+                <CardFooter className="p-4 pt-2 flex justify-between">
+                  <div className="text-sm font-medium text-[#00563F]">
                     {availableRoomCounts[building.code] !== undefined
                       ? `${availableRoomCounts[building.code]} rooms available now`
                       : "Loading..."}
                   </div>
-                </CardContent>
-                <CardFooter className="p-4 pt-2 flex justify-between">
-                  <Button variant="outline">View Details</Button>
-                 <Button
-                   className="bg-[#00563F] hover:bg-[#00563F]/90"
-                   onClick={() => {
-                    if (!user) {
-                    alert("Please sign in to reserve a room.")
-                     } else {
-                    {
-                      console.log("Selected Building:", building); // Log the selected building
-                      setSelectedBuilding(building); // Set the selected building
-                      setShowNearbyRooms(true)
-                  }
-          }; // Open the NearbyRooms dialog
+                  <Button
+                    className="bg-[#00563F] hover:bg-[#00563F]/90"
+                    onClick={() => {
+                      if (!user) {
+                        alert("Please sign in to reserve a room.")
+                      } else {
+                        console.log("Selected Building:", building); // Log the selected building
+                        setSelectedBuilding(building); // Set the selected building
+                        setShowNearbyRooms(true)
+                      }
                     }}
-  >
-    Find Rooms
-  </Button>
-</CardFooter>
+                  >
+                    Find Rooms
+                  </Button>
+                </CardFooter>
               </Card>
             ))}
           </div>
