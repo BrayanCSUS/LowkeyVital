@@ -32,7 +32,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
 
             // Send email to backend
             try {
-                await axios.post('http://localhost:5000/send-email', { email });
+                await axios.post('http://localhost:3001/send-email', { email });
                 console.log('Email sent successfully');
             } catch (error) {
                 console.error('Error sending email:', error);
@@ -45,7 +45,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
 
     const handleCodeSubmit = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/verify-code', { code: verifyCode });
+            const response = await axios.post('http://localhost:3001/verify-code', { code: verifyCode });
             console.log(response.data.message);
             // On successful verification, update auth state:
             login({ email }); 
