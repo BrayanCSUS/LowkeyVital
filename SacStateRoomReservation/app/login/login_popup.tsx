@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,21 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [isEmailSubmitted, setIsEmailSubmitted] = useState(false);
     const [verifyCode, setCode] = useState('');
+
+    const emailInputRef = useRef<HTMLInputElement>(null);
+    const codeInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (open) {
+            setTimeout(() => {
+                if (isEmailSubmitted) {
+                    codeInputRef.current?.focus();
+                } else {
+                    emailInputRef.current?.focus();
+                }
+            }, 50); // Delay to ensure popup is rendered
+        }
+    }, [open, isEmailSubmitted]);
 
     const handleSubmit = async () => {
         const emailParts = email.split('@');
@@ -98,6 +113,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
                     <div>
                         <div>Check your CSUS email for a verification code and enter it below.</div>
                         <Input
+                            ref={codeInputRef}
                             className="bg-white text-black"
                             style={{ paddingLeft: '0.5' }} // Remove left padding
                             onChange={(e) => setCode(e.target.value)} // Update verification code state
@@ -118,6 +134,10 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
                         Enter your CSUS email address
                         <div>
                             <Input
+                                ref={emailInputRef}
+                                type="email"
+                                name="email"
+                                autoComplete="email"
                                 placeholder="jchidella@csus.edu"
                                 className="bg-white text-black"
                                 style={{ paddingLeft: '0.5' }} // Remove left padding
