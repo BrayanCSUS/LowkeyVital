@@ -64,6 +64,9 @@ export default function HomePage() {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
 
+    // New state: map of building code to available room count
+    const [availableRoomCounts, setAvailableRoomCounts] = useState<{ [code: string]: number }>({});
+
     // Helper to format time as 'h:mm AM/PM'
     function formatTime12hr(time: string) {
       if (!time) return "";
@@ -95,6 +98,27 @@ export default function HomePage() {
         })
         .catch((err) => console.error("Error fetching rooms:", err));
     }, [selectedBuilding]);
+
+    // Fetch available room counts for all buildings when buildings list changes
+    useEffect(() => {
+      async function fetchAllAvailableRoomCounts() {
+        const counts: { [code: string]: number } = {};
+        await Promise.all(
+          buildings.map(async (b) => {
+            try {
+              const rooms = await getAvailableRooms(b);
+              counts[b.code] = rooms.length;
+            } catch {
+              counts[b.code] = 0;
+            }
+          })
+        );
+        setAvailableRoomCounts(counts);
+      }
+      if (buildings.length > 0) {
+        fetchAllAvailableRoomCounts();
+      }
+    }, [buildings]);
 
     // Filter building suggestions based on typed text and selected tab.
     const filteredBuildings = buildings.filter((b) => {
@@ -343,7 +367,9 @@ return (
                     ))}
                   </div>
                   <div className="text-sm font-medium text-[#00563F] mt-auto">
-                    {building.availableRooms} rooms available now
+                    {availableRoomCounts[building.code] !== undefined
+                      ? `${availableRoomCounts[building.code]} rooms available now`
+                      : "Loading..."}
                   </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-2 flex justify-between">
