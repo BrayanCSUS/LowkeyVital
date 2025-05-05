@@ -29,7 +29,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { fetchRoomsForBuilding } from "../lib/utils";
+import { getAvailableRooms } from "../lib/roomUtils";
 import { Room } from "../lib/types";
 
 // Props for the NearbyRooms component, defining the selected building
@@ -46,7 +46,7 @@ export default function NearbyRooms({ selectedBuilding }: NearbyRoomsProps) {
   // Fetch rooms for the selected building when it changes
   useEffect(() => {
     if (selectedBuilding) {
-      fetchRoomsForBuilding(selectedBuilding)
+      getAvailableRooms(selectedBuilding)
         .then((rooms) => {
           console.log("Fetched Available Rooms:", rooms); // Log the fetched rooms for debugging
           setAvailableRooms(rooms); // Update the state with the fetched rooms
@@ -87,7 +87,7 @@ export default function NearbyRooms({ selectedBuilding }: NearbyRoomsProps) {
             className="bg-[#00563F] hover:bg-[#00563F]/90"
             onClick={() => {
               if (selectedBuilding) {
-                fetchRoomsForBuilding(selectedBuilding)
+                getAvailableRooms(selectedBuilding)
                   .then((rooms) => setAvailableRooms(rooms)) // Update the room list
                   .catch((err) => console.error("Error refreshing rooms:", err)); // Handle errors
               }

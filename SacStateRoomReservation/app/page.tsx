@@ -13,9 +13,9 @@ import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useEffect } from "react"
-import { fetchRoomsForBuilding } from "../lib/utils";
+import { getAvailableRooms } from "../lib/roomUtils";
 import { Room } from "../lib/types";
-console.log(fetchRoomsForBuilding); // Should log the function definition
+console.log(getAvailableRooms); // Should log the function definition
 import {
   AlertDialog,
   AlertDialogAction,
@@ -51,6 +51,8 @@ export default function HomePage() {
     const [buildings, setBuildings] = useState<Building[]>([]);
     // New state for selected tab
     const [selectedTab, setSelectedTab] = useState<string>("all");
+
+    // New state for rooms and selected room details
     const [rooms, setRooms] = useState<Room[]>([])
     const [selectedRoomDetails, setSelectedRoomDetails] = useState<Room | null>(null);
 
@@ -66,7 +68,7 @@ export default function HomePage() {
     useEffect(() => {
       if (!selectedBuilding) return;
       console.log("Selected Building:", selectedBuilding.code);
-      fetchRoomsForBuilding(selectedBuilding)
+      getAvailableRooms(selectedBuilding)
         .then((roomList) => {
           console.log("Room List:", roomList);
           setRooms(roomList);
@@ -101,6 +103,7 @@ export default function HomePage() {
       }
     }
 
+    // Handle click of the "View Details" button for a room.
     const handleViewDetails = (room: Room) => {
       setSelectedRoomDetails(room);
     };
@@ -192,7 +195,6 @@ return (
                         className="flex items-center justify-between border-b py-2 last:border-0"
                       >
                         <div>
-                          <p className="font-medium">{room.name}</p>
                           <p className="text-xs text-gray-600">Room {room.roomNumber}</p>
                         </div>
                         <Button variant="outline" size="sm" onClick={() => handleViewDetails(room)}>
@@ -374,6 +376,7 @@ return (
       </main>
       <Dialog open={showNearbyRooms} onOpenChange={setShowNearbyRooms}>
         <DialogContent className="max-w-2xl w-full">
+          <DialogTitle>Nearby Rooms</DialogTitle>
           <NearbyRooms selectedBuilding={selectedBuilding} />
         </DialogContent>
       </Dialog>
