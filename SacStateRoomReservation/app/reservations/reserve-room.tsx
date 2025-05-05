@@ -24,7 +24,9 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Reservation {
     building: string;
@@ -91,6 +93,30 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
         return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
     }
 
+    // Helper to generate 15-min increment times starting from the next increment
+    const generateTimeOptions = () => {
+        const times: string[] = [];
+        const now = new Date();
+        let h = now.getHours();
+        let m = now.getMinutes();
+        // Find the next 15-min increment
+        m = m + (15 - (m % 15));
+        if (m === 60) {
+            m = 0;
+            h++;
+        }
+        // Generate times from the next increment to 23:45
+        for (let hour = h; hour < 24; hour++) {
+            for (let min = (hour === h ? m : 0); min < 60; min += 15) {
+                const hourStr = hour.toString().padStart(2, '0');
+                const minStr = min.toString().padStart(2, '0');
+                times.push(`${hourStr}:${minStr}`);
+            }
+        }
+        return times;
+    };
+    const timeOptions = generateTimeOptions();
+
     const getAvailableReservation = () => {
         for (const reservation of userReservations) { // Loop through userReservations
             if (reservation.canUse == null || reservation.canUse) { // Check the canUse property of the current reservation
@@ -137,6 +163,18 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
         // Validate input
         if (!date || !start || !end || !num || !purpose) {
             setAlertMessage("Please fill out all fields.");
+            setShowAlert(true);
+            return;
+        }
+        // 15-minute increment validation
+        const isValid15Min = (time: string) => {
+            const parts = time.split(":");
+            if (parts.length !== 2) return false;
+            const minutes = parseInt(parts[1], 10);
+            return [0, 15, 30, 45].includes(minutes);
+        };
+        if (!isValid15Min(start) || !isValid15Min(end)) {
+            setAlertMessage("Start and end times must be in 15-minute increments (e.g., 09:00, 09:15, 09:30, 09:45).");
             setShowAlert(true);
             return;
         }
@@ -215,11 +253,55 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="start-time">Start Time</Label>
-                                <Input id="start-time" type="time" onChange={handleInputChange} />
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button variant="outline" className="w-full justify-start">
+                                            {start ? formatTime12hr(start) : "--:-- --"}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="p-0">
+                                        <ScrollArea className="h-60">
+                                            <div className="flex flex-col">
+                                                {timeOptions.map((t) => (
+                                                    <Button
+                                                        key={t}
+                                                        variant="ghost"
+                                                        className="justify-start"
+                                                        onClick={() => setStart(t)}
+                                                    >
+                                                        {formatTime12hr(t)}
+                                                    </Button>
+                                                ))}
+                                            </div>
+                                        </ScrollArea>
+                                    </PopoverContent>
+                                </Popover>
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="end-time">End Time</Label>
-                                <Input id="end-time" type="time" onChange={handleInputChange} />
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button variant="outline" className="w-full justify-start">
+                                            {end ? formatTime12hr(end) : "--:-- --"}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="p-0">
+                                        <ScrollArea className="h-60">
+                                            <div className="flex flex-col">
+                                                {timeOptions.map((t) => (
+                                                    <Button
+                                                        key={t}
+                                                        variant="ghost"
+                                                        className="justify-start"
+                                                        onClick={() => setEnd(t)}
+                                                    >
+                                                        {formatTime12hr(t)}
+                                                    </Button>
+                                                ))}
+                                            </div>
+                                        </ScrollArea>
+                                    </PopoverContent>
+                                </Popover>
                             </div>
                         </div>
                         <div className="space-y-2">
