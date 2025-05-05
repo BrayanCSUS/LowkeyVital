@@ -102,7 +102,7 @@ export default function NearbyRooms({ selectedBuilding }: NearbyRoomsProps) {
                   <div className="flex items-center mt-1 text-sm">
                     <MapPin className="h-3 w-3 mr-1" />
                     <span>{(() => {
-                      const floorMap = {
+                      const floorMap: Record<string, string> = {
                         '1': 'First',
                         '2': 'Second',
                         '3': 'Third',

@@ -8,7 +8,6 @@ Create delete system if user cancels reservation
 */
 
 import React, { useState } from 'react';
-import { Reservation, reservation1, reservation2, reservation3 } from './reserve-data-template';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -40,7 +39,38 @@ interface Reservation {
 }
 
 //Import this to another file to access
-export const userReservations: Reservation[] = [ {}, {}, {} ];
+export const userReservations: Reservation[] = [
+  {
+    building: '',
+    room: '',
+    startTime: 0,
+    endTime: 0,
+    purpose: '',
+    numPersons: 0,
+    canUse: true,
+    date: '',
+  },
+  {
+    building: '',
+    room: '',
+    startTime: 0,
+    endTime: 0,
+    purpose: '',
+    numPersons: 0,
+    canUse: true,
+    date: '',
+  },
+  {
+    building: '',
+    room: '',
+    startTime: 0,
+    endTime: 0,
+    purpose: '',
+    numPersons: 0,
+    canUse: true,
+    date: '',
+  },
+];
 
 interface ReserveRoomProps {
     // Props for the ReserveRoom component, defining the details of the selected room

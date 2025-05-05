@@ -101,7 +101,15 @@ export default function ReservationsPage() {
   }
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
   const [savedReservations, setSavedReservations] = useState<Reservation[]>([])
-  const [reserveAgainData, setReserveAgainData] = useState(null)
+
+  // Add ReserveAgainData type for reserveAgainData state
+  type ReserveAgainData = {
+    building: string;
+    room: string;
+    capacity: number;
+  } | null;
+
+  const [reserveAgainData, setReserveAgainData] = useState<ReserveAgainData>(null)
   const [showReserveAgain, setShowReserveAgain] = useState(false)
 
   useEffect(() => {
@@ -180,8 +188,8 @@ export default function ReservationsPage() {
   // Combine localStorage reservations with sample data for upcoming and past
   const allReservations = [
     ...savedReservations.map((r, i) => ({
-      id: `saved-${i}`,
       ...r,
+      id: `saved-${i}`,
       status: r.status || "upcoming",
     })),
     ...upcomingReservations.map(r => ({ ...r, status: "upcoming" })),
