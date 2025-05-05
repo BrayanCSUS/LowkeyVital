@@ -83,22 +83,7 @@ const pastReservations = [
 ]
 
 export default function ReservationsPage() {
-  const router = useRouter()
   const { user } = useAuth()
-  const hasAlerted = useRef(false);
-  // Redirect to home page if the user is not logged in.
-  useEffect(() => {
-    if (!user && !hasAlerted.current) {
-      alert("Please log in to view your reservations.");
-      hasAlerted.current = true;
-      router.push("/");
-    }
-  }, [user, router])
-
-  // Render nothing if user is not logged in to prevent rendering of the page content.
-  if (!user) {
-    return null
-  }
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
   const [savedReservations, setSavedReservations] = useState<Reservation[]>([])
 
