@@ -44,7 +44,11 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
 
             login( { email });
 
-            toast({ title: "Bypass login", description: "Logged in with bypass." }); // Show toast
+            toast({
+                title: "Bypass login",
+                description: "Logged in with bypass.",
+                duration: 10000,
+            });
 
             onClose();
         } else if (emailParts.length === 2 && emailParts[1] === 'csus.edu' && /^[a-zA-Z0-9]+$/.test(emailParts[0])) {
@@ -56,7 +60,10 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
             try {
                 await axios.post('http://localhost:3001/send-email', { email });
                 console.log('Email sent successfully');
-                toast({ title: "Email Sent", description: "Check your CSUS email for a verification code." }); // Show toast
+                toast({ title: "Email Sent",
+                        description: "Check your CSUS email for a verification code.",
+                        duration: 10000,
+                });
             } catch (error) {
                 console.error('Error sending email:', error);
                 setErrorMessage('Failed to send email. Please try again later.');
@@ -72,7 +79,10 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
             console.log(response.data.message);
             // On successful verification, update auth state:
             login({ email }); 
-            toast({ title: "Login Successful", description: "You are now logged in." }); // Show toast
+            toast({ title: "Login Successful",
+                    description: "You are now logged in.",
+                    duration: 10000,
+            });
             onClose(); // Close the popup if verification is successful
         } catch (error) {
             console.error('Error verifying code:', error);
