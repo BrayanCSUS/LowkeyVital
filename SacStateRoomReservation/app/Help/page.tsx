@@ -7,7 +7,7 @@ import { HelpCircle, Info, Search, MapPin, Mail, Phone, User } from "lucide-reac
 import Sign_In_Button from "../login/sign_in_button"
 import { useAuth } from "@/context/AuthContext"
 import SignOutButton from '../login/sign_out_button'
-import { LoginAlert } from "../login/login_requirement_alert"
+import { Alert } from "../../components/alert"
 import { useState } from "react"
 
 export default function HelpPage() {
@@ -15,9 +15,11 @@ export default function HelpPage() {
 
   //Show login alert if trying to access My Reservations page before sign in
       const [isAlertOpen, setAlertOpen] = useState(false);
+      const [description, setDescription] = useState("Default alert");
       const myResRedirect = (e) => {
         if (!user) {
           e.preventDefault(); // Prevent the default link behavior
+          setDescription("Please login to access the My Reservations page");
           setAlertOpen(true); // Show the alert
         }
   };
@@ -35,7 +37,7 @@ export default function HelpPage() {
             <Link href="/reservations" className="text-sm font-medium hover:underline" onClick={myResRedirect}>
               My Reservations
             </Link>
-            <LoginAlert isOpen={isAlertOpen} onClose={() => setAlertOpen(false)} />
+            <Alert isOpen={isAlertOpen} onClose={() => setAlertOpen(false)} description={ description }/>
             <Link href="/Help" className="text-sm font-medium hover:underline">Help</Link>
           </nav>
           <div className="flex items-center gap-4">

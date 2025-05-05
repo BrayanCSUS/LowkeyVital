@@ -19,7 +19,7 @@ import { useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
 import { getAvailableRooms } from "../lib/roomUtils";
 import { Room } from "../lib/types";
-import { LoginAlert } from "./login/login_requirement_alert"
+import { Alert } from "../components/alert"
 console.log(getAvailableRooms); // Should log the function definition
 import {
   AlertDialog,
@@ -32,6 +32,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Description } from "@radix-ui/react-toast"
 
 // Building interface to define the structure of building data.
 interface Building {
@@ -143,24 +144,22 @@ export default function HomePage() {
 
     //Show login alert if trying to access My Reservations page before sign in
     const [isAlertOpen, setAlertOpen] = useState(false);
+    const [description, setDescription] = useState("Default alert");
     const myResRedirect = (e) => {
       if (!user) {
         e.preventDefault(); // Prevent the default link behavior
+        setDescription("Please login to access the My Reservations page")
         setAlertOpen(true); // Show the alert
       }
     };
 
     const handleFindRooms = () => {
-      if (!user) {
-        setAlertMessage("Please sign in to reserve a room.");
-        setShowAlert(true);
-        return;
-      }
+      myResRedirect;
       if (selectedBuilding) {
         setShowRooms(true);
       } else {
-        setAlertMessage("Please select a building from the suggestions.");
-        setShowAlert(true);
+        setDescription("Please select a building.")
+        setAlertOpen(true); // Show the alert
       }
     }
 
@@ -184,7 +183,7 @@ return (
             <Link href="/reservations" className="text-sm font-medium hover:underline" onClick={myResRedirect}>
               My Reservations
             </Link>
-            <LoginAlert isOpen={isAlertOpen} onClose={() => setAlertOpen(false)} />
+            <Alert isOpen={isAlertOpen} onClose={() => setAlertOpen(false)} description={ "e" }/>
             <Link href="/Help" className="text-sm font-medium hover:underline">
               Help
             </Link>
@@ -246,6 +245,7 @@ return (
                 >
                   Find Rooms
                 </Button>
+                <Alert isOpen={isAlertOpen} onClose={() => setAlertOpen(false) } description={ "Please select a building."} />
               </div>
               {/* Scrollable rooms list based on selected building */}
               {showRooms && selectedBuilding && (
@@ -388,18 +388,28 @@ return (
                   </div>
                   <Button
                     className="bg-[#00563F] hover:bg-[#00563F]/90"
-                    onClick={() => {
-                      if (!user) {
-                        alert("Please sign in to reserve a room.")
-                      } else {
-                        console.log("Selected Building:", building); // Log the selected building
-                        setSelectedBuilding(building); // Set the selected building
-                        setShowNearbyRooms(true)
+                    onClick= {
+                      () => {
+                        if (user) {
+                          console.log("Selected Building:", building); // Log the selected building
+                          setSelectedBuilding(building); // Set the selected building
+                          setShowNearbyRooms(true)
+                        }
+                        else
+                        {
+                          setDescription("Please sign in to reserve a room.")
+                          setAlertOpen(true);
+                        }
                       }
-                    }}
+                    }
                   >
                     Find Rooms
                   </Button>
+                  <Alert
+                    isOpen= { isAlertOpen }
+                    onClose= {() => setAlertOpen(false) }
+                    description={ description }
+                  />
                 </CardFooter>
               </Card>
             ))}
