@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Popup from 'reactjs-popup';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { X } from "lucide-react";
 import 'reactjs-popup/dist/index.css';
 import '/styles/login_popup.css';
 import axios from 'axios';
@@ -73,15 +74,21 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
 
     return (
         <Popup open={open} onClose={handleClose} modal nested>
-            <div>
-                <Button onClick={handleClose} className='close-button'>
-                    X
+            <div className="flex justify-end">
+                <Button
+                    onClick={handleClose}
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Close"
+                    className="close-button p-1 hover:bg-[#c4b581] focus:outline-none"
+                >
+                    <X className="h-5 w-5 text-gray-400" />
                 </Button>
             </div>
             <div className='popup-content'>
                 {isEmailSubmitted ? (
                     <div>
-                        <div>Please check your inbox and enter the verification code</div>
+                        <div>Check your CSUS email for a verification code and enter it below.</div>
                         <Input
                             className="bg-white text-black"
                             style={{ paddingLeft: '0.5' }} // Remove left padding
