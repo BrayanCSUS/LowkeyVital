@@ -8,7 +8,6 @@ Create delete system if user cancels reservation
 */
 
 import React, { useState } from 'react';
-import { Reservation, reservation1, reservation2, reservation3 } from './reserve-data-template';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -24,7 +23,9 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Reservation {
     building: string;
@@ -38,7 +39,38 @@ interface Reservation {
 }
 
 //Import this to another file to access
-export const userReservations: Reservation[] = [ {}, {}, {} ];
+export const userReservations: Reservation[] = [
+  {
+    building: '',
+    room: '',
+    startTime: 0,
+    endTime: 0,
+    purpose: '',
+    numPersons: 0,
+    canUse: true,
+    date: '',
+  },
+  {
+    building: '',
+    room: '',
+    startTime: 0,
+    endTime: 0,
+    purpose: '',
+    numPersons: 0,
+    canUse: true,
+    date: '',
+  },
+  {
+    building: '',
+    room: '',
+    startTime: 0,
+    endTime: 0,
+    purpose: '',
+    numPersons: 0,
+    canUse: true,
+    date: '',
+  },
+];
 
 interface ReserveRoomProps {
     // Props for the ReserveRoom component, defining the details of the selected room
@@ -71,6 +103,64 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
     const [num, setNum] = useState(0);
     const [purpose, setPurpose] = useState(''); // Add state for purpose
     const [date, setDate] = useState('');
+
+    // Helper to format date as 'Month Day, Year'
+    function formatReservationDate(dateStr: string) {
+        if (!dateStr) return "";
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return dateStr;
+        return d.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+    // Helper to format time as 12-hour
+    function formatTime12hr(time: string) {
+        if (!time) return "";
+        if (time.match(/AM|PM/i)) return time;
+        const [h, m] = time.split(":");
+        if (h === undefined || m === undefined) return time;
+        const date = new Date();
+        date.setHours(Number(h));
+        date.setMinutes(Number(m));
+        return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
+    }
+
+    // Helper to generate 15-min increment times starting from the next increment
+    const generateTimeOptions = () => {
+        const times: string[] = [];
+
+        //const now = new Date(); // 
+        const now = new Date("2025-05-05T16:30:00"); // Monday, 4:30 PM hardcoded for testing
+
+        let h = now.getHours();
+        let m = now.getMinutes();
+        // Find the next 15-min increment
+        m = m + (15 - (m % 15));
+        if (m === 60) {
+            m = 0;
+            h++;
+        }
+        // Generate times from the next increment to 23:45
+        for (let hour = h; hour < 24; hour++) {
+            for (let min = (hour === h ? m : 0); min < 60; min += 15) {
+                const hourStr = hour.toString().padStart(2, '0');
+                const minStr = min.toString().padStart(2, '0');
+                times.push(`${hourStr}:${minStr}`);
+            }
+        }
+        return times;
+    };
+    const timeOptions = generateTimeOptions();
+
+    // Helper to map building name to code
+    async function getBuildingCodeFromName(name: string): Promise<string | null> {
+        try {
+            const resp = await fetch("/data/buildings_data.json");
+            const data = await resp.json();
+            const found = data.find((b: { name: string }) => b.name === name);
+            return found ? found.code : null;
+        } catch {
+            return null;
+        }
+    }
 
     const getAvailableReservation = () => {
         for (const reservation of userReservations) { // Loop through userReservations
@@ -105,7 +195,7 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
         setPurpose(value); // Update the purpose state
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // Find the first available reservation object
         const current = getAvailableReservation();
 
@@ -121,6 +211,18 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
             setShowAlert(true);
             return;
         }
+        // 15-minute increment validation
+        const isValid15Min = (time: string) => {
+            const parts = time.split(":");
+            if (parts.length !== 2) return false;
+            const minutes = parseInt(parts[1], 10);
+            return [0, 15, 30, 45].includes(minutes);
+        };
+        if (!isValid15Min(start) || !isValid15Min(end)) {
+            setAlertMessage("Start and end times must be in 15-minute increments (e.g., 09:00, 09:15, 09:30, 09:45).");
+            setShowAlert(true);
+            return;
+        }
         if (start >= end) {
             setAlertMessage("Start time must be before end time.");
             setShowAlert(true);
@@ -131,6 +233,51 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
             setShowAlert(true);
             return;
         }
+
+        // --- New logic: Prevent reservation past available until time ---
+        try {
+            // Map building name to code if needed
+            let buildingCode = selectedRoom.building;
+            // If it's not a known code, try to map from name
+            if (buildingCode.length > 3) {
+                const mapped = await getBuildingCodeFromName(buildingCode);
+                if (!mapped) throw new Error("Could not map building name to code");
+                buildingCode = mapped;
+            }
+            const resp = await fetch("/data/room_availability.json");
+            const data = await resp.json();
+            const buildingRooms = data[buildingCode];
+            console.log("DEBUG: buildingCode:", buildingCode);
+            if (!buildingRooms) throw new Error("Building not found in data");
+            const roomData = buildingRooms[selectedRoom.room];
+            console.log("DEBUG: selectedRoom.room:", selectedRoom.room);
+            if (!roomData) throw new Error("Room not found in building");
+            // Get day of week from selected date
+            console.log("DEBUG: selected date:", date);
+            const dayOfWeek = date ? new Date(date + 'T00:00:00').toLocaleString("en-US", { weekday: "long" }) : "";
+            console.log("DEBUG: dayOfWeek:", dayOfWeek);
+            const slots = roomData[dayOfWeek];
+            console.log("DEBUG: slots:", slots);
+            if (!slots || !Array.isArray(slots)) throw new Error("No availability for this day");
+            // Find the slot that contains the start time
+            const slot = slots.find((s: { start: string, end: string }) => start >= s.start && start < s.end);
+            console.log("DEBUG: slot found:", slot);
+            if (!slot) {
+                setAlertMessage("Selected start time is not available for this room on that day.");
+                setShowAlert(true);
+                return;
+            }
+            if (end > slot.end) {
+                setAlertMessage(`Your end time needs to be before: ${formatTime12hr(slot.end)}. \nA class is scheduled for that time.`);
+                setShowAlert(true);
+                return;
+            }
+        } catch (e) {
+            setAlertMessage("Could not verify room availability. Please try again.");
+            setShowAlert(true);
+            return;
+        }
+        // --- End new logic ---
 
         // Update the current reservation object with user inputs
         current.building = building;
@@ -160,9 +307,9 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
             `Reservation confirmed!\n\n` +
             `Building: ${current.building}\n` +
             `Room: ${current.room}\n` +
-            `Date: ${current.date}\n` +
-            `Start Time: ${start}\n` +
-            `End Time: ${end}\n` +
+            `Date: ${formatReservationDate(current.date)}\n` +
+            `Start Time: ${formatTime12hr(start)}\n` +
+            `End Time: ${formatTime12hr(end)}\n` +
             `Purpose: ${current.purpose}`
         );
         setShowSuccess(true);
@@ -196,11 +343,55 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="start-time">Start Time</Label>
-                                <Input id="start-time" type="time" onChange={handleInputChange} />
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button variant="outline" className="w-full justify-start">
+                                            {start ? formatTime12hr(start) : "--:-- --"}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="p-0">
+                                        <ScrollArea className="h-60">
+                                            <div className="flex flex-col">
+                                                {timeOptions.map((t) => (
+                                                    <Button
+                                                        key={t}
+                                                        variant="ghost"
+                                                        className="justify-start"
+                                                        onClick={() => setStart(t)}
+                                                    >
+                                                        {formatTime12hr(t)}
+                                                    </Button>
+                                                ))}
+                                            </div>
+                                        </ScrollArea>
+                                    </PopoverContent>
+                                </Popover>
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="end-time">End Time</Label>
-                                <Input id="end-time" type="time" onChange={handleInputChange} />
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button variant="outline" className="w-full justify-start">
+                                            {end ? formatTime12hr(end) : "--:-- --"}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="p-0">
+                                        <ScrollArea className="h-60">
+                                            <div className="flex flex-col">
+                                                {timeOptions.map((t) => (
+                                                    <Button
+                                                        key={t}
+                                                        variant="ghost"
+                                                        className="justify-start"
+                                                        onClick={() => setEnd(t)}
+                                                    >
+                                                        {formatTime12hr(t)}
+                                                    </Button>
+                                                ))}
+                                            </div>
+                                        </ScrollArea>
+                                    </PopoverContent>
+                                </Popover>
                             </div>
                         </div>
                         <div className="space-y-2">
@@ -237,7 +428,11 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Notice</AlertDialogTitle>
-                        <AlertDialogDescription>{alertMessage}</AlertDialogDescription>
+                        <AlertDialogDescription>
+                            {alertMessage.split('\n').map((line, idx) => (
+                                <div key={idx}>{line}</div>
+                            ))}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogAction onClick={() => setShowAlert(false)}>OK</AlertDialogAction>

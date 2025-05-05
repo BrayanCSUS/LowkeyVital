@@ -83,32 +83,9 @@ export default function NearbyRooms({ selectedBuilding }: NearbyRoomsProps) {
       {/* Header section with building name and sorting options */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Available Rooms in {selectedBuilding.name}</h2>
-        <div className="flex items-center gap-2">
-          {/* Dropdown to sort rooms (currently placeholder functionality) */}
-          <Select defaultValue="distance">
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="distance">Distance</SelectItem>
-              <SelectItem value="availability">Availability</SelectItem>
-              <SelectItem value="capacity">Capacity</SelectItem>
-            </SelectContent>
-          </Select>
-          {/* Refresh button to re-fetch rooms */}
-          <Button
-            className="bg-[#00563F] hover:bg-[#00563F]/90"
-            onClick={() => {
-              if (selectedBuilding) {
-                getAvailableRooms(selectedBuilding)
-                  .then((rooms) => setAvailableRooms(rooms)) // Update the room list
-                  .catch((err) => console.error("Error refreshing rooms:", err)); // Handle errors
-              }
-            }}
-          >
-            Refresh
-          </Button>
-        </div>
+        
+        
+
       </div>
 
       {/* Grid to display room cards */}
@@ -124,7 +101,21 @@ export default function NearbyRooms({ selectedBuilding }: NearbyRoomsProps) {
                   </CardTitle>
                   <div className="flex items-center mt-1 text-sm">
                     <MapPin className="h-3 w-3 mr-1" />
-                    <span>{room.distance}</span> {/* Display room distance */}
+                    <span>{(() => {
+                      const floorMap: Record<string, string> = {
+                        '1': 'First',
+                        '2': 'Second',
+                        '3': 'Third',
+                        '4': 'Fourth',
+                        '5': 'Fifth',
+                        '6': 'Sixth',
+                        '7': 'Seventh',
+                        '8': 'Eighth',
+                        '9': 'Ninth'
+                      };
+                      const digit = room.roomNumber && /^[0-9]/.test(room.roomNumber) ? room.roomNumber[0] : '?';
+                      return floorMap[digit] ? `${floorMap[digit]} Floor` : `Floor ${digit}`;
+                    })()}</span>
                   </div>
                 </div>
                 <Badge className="bg-[#C4B581] text-[#00563F] hover:bg-[#C4B581]/90">Available</Badge>

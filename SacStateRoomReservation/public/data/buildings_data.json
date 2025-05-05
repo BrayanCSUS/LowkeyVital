@@ -34,7 +34,10 @@
     "totalRooms": 12,
     "hours": "8:00 AM - 8:00 PM",
     "features": [
-      "Classrooms"
+      "Computer Labs",
+      "Classrooms",
+      "Information Resources & Technology (IRT)"
+      
     ],
     "image": "/images/AcademicInformationResourceCenter.jpg?height=200&width=300"
   },

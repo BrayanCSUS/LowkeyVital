@@ -13,6 +13,7 @@ import RoomMap from "@/components/room-map"
 import NearbyRooms from "@/components/nearby-rooms"
 import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
+import SignOutButton from './login/sign_out_button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
@@ -59,6 +60,13 @@ export default function HomePage() {
     const [rooms, setRooms] = useState<Room[]>([])
     const [selectedRoomDetails, setSelectedRoomDetails] = useState<Room | null>(null);
 
+    // New state for alert dialog
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+
+    // New state: map of building code to available room count
+    const [availableRoomCounts, setAvailableRoomCounts] = useState<{ [code: string]: number }>({});
+
     // Helper to format time as 'h:mm AM/PM'
     function formatTime12hr(time: string) {
       if (!time) return "";
@@ -91,6 +99,27 @@ export default function HomePage() {
         .catch((err) => console.error("Error fetching rooms:", err));
     }, [selectedBuilding]);
 
+    // Fetch available room counts for all buildings when buildings list changes
+    useEffect(() => {
+      async function fetchAllAvailableRoomCounts() {
+        const counts: { [code: string]: number } = {};
+        await Promise.all(
+          buildings.map(async (b) => {
+            try {
+              const rooms = await getAvailableRooms(b);
+              counts[b.code] = rooms.length;
+            } catch {
+              counts[b.code] = 0;
+            }
+          })
+        );
+        setAvailableRoomCounts(counts);
+      }
+      if (buildings.length > 0) {
+        fetchAllAvailableRoomCounts();
+      }
+    }, [buildings]);
+
     // Filter building suggestions based on typed text and selected tab.
     const filteredBuildings = buildings.filter((b) => {
       const matchesSearch = b.name?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -112,17 +141,18 @@ export default function HomePage() {
     const { user } = useAuth()
 
     const handleFindRooms = () => {
-    if (!user) {
-      alert("Please sign in to reserve a room.")
-      return
+      if (!user) {
+        setAlertMessage("Please sign in to reserve a room.");
+        setShowAlert(true);
+        return;
+      }
+      if (selectedBuilding) {
+        setShowRooms(true);
+      } else {
+        setAlertMessage("Please select a building from the suggestions.");
+        setShowAlert(true);
+      }
     }
-    if (selectedBuilding) {
-      setShowRooms(true)
-    } else {
-      alert("Please select a building from the suggestions.")
-    }
-  }
-
 
     // Handle click of the "View Details" button for a room.
     const handleViewDetails = (room: Room) => {
@@ -149,7 +179,8 @@ return (
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-          { !user && <Sign_In_Button /> }
+            <Sign_In_Button/>
+            <SignOutButton/>
           </div>
         </div>
       </header>
@@ -167,6 +198,8 @@ return (
                 <div className="relative w-full max-w-md">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
+                    id="building-search"
+                    name="building-search"
                     type="search"
                     placeholder="Search by building..."
                     className="pl-10 bg-white text-black"
@@ -335,29 +368,28 @@ return (
                       </Badge>
                     ))}
                   </div>
-                  <div className="text-sm font-medium text-[#00563F] mt-auto">
-                    {building.totalRooms} rooms available now
-                  </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-2 flex justify-between">
-                  <Button variant="outline">View Details</Button>
-                 <Button
-                   className="bg-[#00563F] hover:bg-[#00563F]/90"
-                   onClick={() => {
-                    if (!user) {
-                    alert("Please sign in to reserve a room.")
-                     } else {
-                    {
-                      console.log("Selected Building:", building); // Log the selected building
-                      setSelectedBuilding(building); // Set the selected building
-                      setShowNearbyRooms(true)
-                  }
-          }; // Open the NearbyRooms dialog
+                  <div className="text-sm font-medium text-[#00563F]">
+                    {availableRoomCounts[building.code] !== undefined
+                      ? `${availableRoomCounts[building.code]} rooms available now`
+                      : "Loading..."}
+                  </div>
+                  <Button
+                    className="bg-[#00563F] hover:bg-[#00563F]/90"
+                    onClick={() => {
+                      if (!user) {
+                        alert("Please sign in to reserve a room.")
+                      } else {
+                        console.log("Selected Building:", building); // Log the selected building
+                        setSelectedBuilding(building); // Set the selected building
+                        setShowNearbyRooms(true)
+                      }
                     }}
-  >
-    Find Rooms
-  </Button>
-</CardFooter>
+                  >
+                    Find Rooms
+                  </Button>
+                </CardFooter>
               </Card>
             ))}
           </div>
@@ -409,12 +441,24 @@ return (
       </main>
       <Dialog open={showNearbyRooms} onOpenChange={setShowNearbyRooms}>
         <DialogContent className="max-w-2xl w-full">
-          <DialogTitle>Nearby Rooms</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">Pick Your Room: </DialogTitle>
           <div className="max-h-[75vh] overflow-y-auto p-2">
             <NearbyRooms selectedBuilding={selectedBuilding} />
           </div>
         </DialogContent>
       </Dialog>
+      {/* AlertDialog for alerts */}
+      <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Notice</AlertDialogTitle>
+            <AlertDialogDescription>{alertMessage}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setShowAlert(false)}>OK</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       {selectedRoomDetails && (
         <Dialog open={!!selectedRoomDetails} onOpenChange={() => setSelectedRoomDetails(null)}>
           <DialogContent>
