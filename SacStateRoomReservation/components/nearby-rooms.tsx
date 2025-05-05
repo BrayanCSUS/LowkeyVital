@@ -38,6 +38,19 @@ interface NearbyRoomsProps {
 }
 
 export default function NearbyRooms({ selectedBuilding }: NearbyRoomsProps) {
+  // Helper to format time as 'h:mm AM/PM'
+  function formatTime12hr(time: string) {
+    if (!time) return "";
+    // If already in AM/PM format, return as is
+    if (time.match(/AM|PM/i)) return time;
+    const [h, m] = time.split(":");
+    if (h === undefined || m === undefined) return time;
+    const date = new Date();
+    date.setHours(Number(h));
+    date.setMinutes(Number(m));
+    return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
+  }
+
   // State to store the list of available rooms
   const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
   // State to control how many rooms are visible at a time
@@ -126,7 +139,7 @@ export default function NearbyRooms({ selectedBuilding }: NearbyRoomsProps) {
                 </div>
                 <div className="flex items-center">
                   <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <span>Until: {room.availableUntil}</span> {/* Display availability time */}
+                  <span>Available Until: {formatTime12hr(room.availableUntil)}</span> {/* Display availability time in 12hr format */}
                 </div>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">

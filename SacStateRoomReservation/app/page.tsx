@@ -59,6 +59,18 @@ export default function HomePage() {
     const [rooms, setRooms] = useState<Room[]>([])
     const [selectedRoomDetails, setSelectedRoomDetails] = useState<Room | null>(null);
 
+    // Helper to format time as 'h:mm AM/PM'
+    function formatTime12hr(time: string) {
+      if (!time) return "";
+      if (time.match(/AM|PM/i)) return time;
+      const [h, m] = time.split(":");
+      if (h === undefined || m === undefined) return time;
+      const date = new Date();
+      date.setHours(Number(h));
+      date.setMinutes(Number(m));
+      return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
+    }
+
     // Fetch buildings data from JSON file on component mount.
     useEffect(() => {
       fetch("/data/buildings_data.json")
@@ -414,7 +426,7 @@ return (
                 <p><strong>Distance:</strong> {selectedRoomDetails.distance}</p>
                 <p><strong>Capacity:</strong> {selectedRoomDetails.capacity}</p>
                 <p><strong>Features:</strong> {selectedRoomDetails.features.join(", ")}</p>
-                <p><strong>Available Until:</strong> {selectedRoomDetails.availableUntil}</p>
+                <p><strong>Available Until:</strong> {formatTime12hr(selectedRoomDetails.availableUntil)}</p>
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
