@@ -1,9 +1,6 @@
-// reservations/page.tsx
-
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -83,22 +80,7 @@ const pastReservations = [
 ]
 
 export default function ReservationsPage() {
-  const router = useRouter()
   const { user } = useAuth()
-  const hasAlerted = useRef(false);
-  // Redirect to home page if the user is not logged in.
-  useEffect(() => {
-    if (!user && !hasAlerted.current) {
-      alert("Please log in to view your reservations.");
-      hasAlerted.current = true;
-      router.push("/");
-    }
-  }, [user, router])
-
-  // Render nothing if user is not logged in to prevent rendering of the page content.
-  if (!user) {
-    return null
-  }
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
   const [savedReservations, setSavedReservations] = useState<Reservation[]>([])
 
