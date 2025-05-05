@@ -19,6 +19,7 @@ import { useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
 import { getAvailableRooms } from "../lib/roomUtils";
 import { Room } from "../lib/types";
+import { LoginAlert } from "./login/login_requirement_alert"
 console.log(getAvailableRooms); // Should log the function definition
 import {
   AlertDialog,
@@ -140,6 +141,15 @@ export default function HomePage() {
       // Update handleFindRooms: only allow if user is logged in.
     const { user } = useAuth()
 
+    //Show login alert if trying to access My Reservations page before sign in
+    const [isAlertOpen, setAlertOpen] = useState(false);
+    const myResRedirect = (e) => {
+      if (!user) {
+        e.preventDefault(); // Prevent the default link behavior
+        setAlertOpen(true); // Show the alert
+      }
+    };
+
     const handleFindRooms = () => {
       if (!user) {
         setAlertMessage("Please sign in to reserve a room.");
@@ -171,9 +181,10 @@ return (
             <Link href="/" className="text-sm font-medium hover:underline">
               Home
             </Link>
-            <Link href="/reservations" className="text-sm font-medium hover:underline">
+            <Link href="/reservations" className="text-sm font-medium hover:underline" onClick={myResRedirect}>
               My Reservations
             </Link>
+            <LoginAlert isOpen={isAlertOpen} onClose={() => setAlertOpen(false)} />
             <Link href="/Help" className="text-sm font-medium hover:underline">
               Help
             </Link>
