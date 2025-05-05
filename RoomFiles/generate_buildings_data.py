@@ -21,8 +21,6 @@ def generate_building_data(df):
         sanitized_building_name = building_name.replace(" ", "")
         # Construct the filename
         filename = f"{sanitized_building_name}.jpg"
-        # Debugging print statement for the filename
-        print(f"Debug: Checking for image file: {filename}")
         # Check if the image exists in the specified directory
         filepath = os.path.join(image_dir, filename)
         if os.path.exists(filepath):
@@ -34,8 +32,8 @@ def generate_building_data(df):
     grouped["name"] = grouped["code"].map(building_names["building"])
     grouped["id"] = range(1, len(grouped) + 1)
     grouped["floors"] = 3   # Filler data, no data in CSV
-    grouped["availableRooms"] = 0  # Optional: can be filled from logic
-    grouped["hours"] = "7:00 AM - 10:00 PM" # Filler data, no data in CSV
+    grouped["totalRooms"] = grouped["rooms"]  # Optional: can be filled from logic
+    grouped["hours"] = "8:00 AM - 8:00 PM" # Filler data, no data in CSV
     grouped["features"] = [["Classrooms"]] * len(grouped)
     grouped["image"] = grouped["name"].apply(lambda name: get_image_path(name))
 

@@ -38,8 +38,8 @@ interface Building {
   code: string; // code like "LIB"
   type: "academic" | "student";
   floors: number;
-  rooms: number;
-  availableRooms: number;
+  totalRooms: number;
+  //availableRooms: number; // No implementation yet
   hours: string;
   features: string[];
   image: string;
@@ -336,7 +336,7 @@ return (
                     ))}
                   </div>
                   <div className="text-sm font-medium text-[#00563F] mt-auto">
-                    {building.availableRooms} rooms available now
+                    {building.totalRooms} rooms available now
                   </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-2 flex justify-between">

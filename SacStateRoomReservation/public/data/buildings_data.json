@@ -5,8 +5,8 @@
     "name": "Alpine Hall",
     "id": 1,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 17,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -18,8 +18,8 @@
     "name": "Amador Hall",
     "id": 2,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 21,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -31,8 +31,8 @@
     "name": "Academic Information Resource Center",
     "id": 3,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 12,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -44,8 +44,8 @@
     "name": "Art Sculpture Lab",
     "id": 4,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 3,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -57,8 +57,8 @@
     "name": "Benicia Hall",
     "id": 5,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 2,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -70,8 +70,8 @@
     "name": "Brighton Hall",
     "id": 6,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 18,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -83,8 +83,8 @@
     "name": "Calaveras Hall",
     "id": 7,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 5,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -96,8 +96,8 @@
     "name": "Capistrano Hall",
     "id": 8,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 14,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -109,8 +109,8 @@
     "name": "Douglass Hall",
     "id": 9,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 13,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -122,8 +122,8 @@
     "name": "Del Norte Hall",
     "id": 10,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 3,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -135,8 +135,8 @@
     "name": "Eureka Hall",
     "id": 11,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 28,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -148,8 +148,8 @@
     "name": "Folsom Hall",
     "id": 12,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 18,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -161,8 +161,8 @@
     "name": "Humboldt Hall",
     "id": 13,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 6,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -174,8 +174,8 @@
     "name": "Kadema Hall",
     "id": 14,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 15,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -187,8 +187,8 @@
     "name": "Library",
     "id": 15,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 9,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -200,8 +200,8 @@
     "name": "Lassen Hall",
     "id": 16,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 1,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -213,8 +213,8 @@
     "name": "Mendocino Hall",
     "id": 17,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 31,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -226,8 +226,8 @@
     "name": "Mariposa Hall",
     "id": 18,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 23,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -239,8 +239,8 @@
     "name": "Placer Hall",
     "id": 19,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 3,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -252,8 +252,8 @@
     "name": "Riverside Hall",
     "id": 20,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 25,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -265,8 +265,8 @@
     "name": "Shasta Hall",
     "id": 21,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 11,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -278,8 +278,8 @@
     "name": "Solano Hall",
     "id": 22,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 17,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -291,8 +291,8 @@
     "name": "Sequoia Hall",
     "id": 23,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 38,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -304,8 +304,8 @@
     "name": "Studio Theatre",
     "id": 24,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 1,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -317,8 +317,8 @@
     "name": "Tahoe Hall",
     "id": 25,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 8,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -330,8 +330,8 @@
     "name": "Tschannen Engineering Building",
     "id": 26,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 12,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -343,8 +343,8 @@
     "name": "Tschannen Science Complex",
     "id": 27,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 22,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
@@ -356,8 +356,8 @@
     "name": "Yosemite Hall",
     "id": 28,
     "floors": 3,
-    "availableRooms": 0,
-    "hours": "7:00 AM - 10:00 PM",
+    "totalRooms": 10,
+    "hours": "8:00 AM - 8:00 PM",
     "features": [
       "Classrooms"
     ],
