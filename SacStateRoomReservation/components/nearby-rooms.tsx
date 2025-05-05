@@ -83,32 +83,9 @@ export default function NearbyRooms({ selectedBuilding }: NearbyRoomsProps) {
       {/* Header section with building name and sorting options */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Available Rooms in {selectedBuilding.name}</h2>
-        <div className="flex items-center gap-2">
-          {/* Dropdown to sort rooms (currently placeholder functionality) */}
-          <Select defaultValue="distance">
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="distance">Distance</SelectItem>
-              <SelectItem value="availability">Availability</SelectItem>
-              <SelectItem value="capacity">Capacity</SelectItem>
-            </SelectContent>
-          </Select>
-          {/* Refresh button to re-fetch rooms */}
-          <Button
-            className="bg-[#00563F] hover:bg-[#00563F]/90"
-            onClick={() => {
-              if (selectedBuilding) {
-                getAvailableRooms(selectedBuilding)
-                  .then((rooms) => setAvailableRooms(rooms)) // Update the room list
-                  .catch((err) => console.error("Error refreshing rooms:", err)); // Handle errors
-              }
-            }}
-          >
-            Refresh
-          </Button>
-        </div>
+        
+        
+
       </div>
 
       {/* Grid to display room cards */}

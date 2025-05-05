@@ -72,6 +72,25 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
     const [purpose, setPurpose] = useState(''); // Add state for purpose
     const [date, setDate] = useState('');
 
+    // Helper to format date as 'Month Day, Year'
+    function formatReservationDate(dateStr: string) {
+        if (!dateStr) return "";
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return dateStr;
+        return d.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+    // Helper to format time as 12-hour
+    function formatTime12hr(time: string) {
+        if (!time) return "";
+        if (time.match(/AM|PM/i)) return time;
+        const [h, m] = time.split(":");
+        if (h === undefined || m === undefined) return time;
+        const date = new Date();
+        date.setHours(Number(h));
+        date.setMinutes(Number(m));
+        return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
+    }
+
     const getAvailableReservation = () => {
         for (const reservation of userReservations) { // Loop through userReservations
             if (reservation.canUse == null || reservation.canUse) { // Check the canUse property of the current reservation
@@ -160,9 +179,9 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
             `Reservation confirmed!\n\n` +
             `Building: ${current.building}\n` +
             `Room: ${current.room}\n` +
-            `Date: ${current.date}\n` +
-            `Start Time: ${start}\n` +
-            `End Time: ${end}\n` +
+            `Date: ${formatReservationDate(current.date)}\n` +
+            `Start Time: ${formatTime12hr(start)}\n` +
+            `End Time: ${formatTime12hr(end)}\n` +
             `Purpose: ${current.purpose}`
         );
         setShowSuccess(true);
