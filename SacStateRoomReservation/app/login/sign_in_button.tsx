@@ -3,9 +3,11 @@
 import React, { useState } from 'react';
 import LoginPopup from './login_popup';
 import { Button } from "@/components/ui/button";
+import { useAuth } from '../../context/AuthContext';
 
 const SignInButton = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const { user } = useAuth();
 
     // Open the popup
     const handleClick = () => {
@@ -16,6 +18,11 @@ const SignInButton = () => {
     const closePopup = () => {
         setIsOpen(false);
     };
+
+    // Render the button only if the user is not logged in
+    if (user) {
+        return null;
+    }
 
     return (
         <div>
