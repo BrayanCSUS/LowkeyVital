@@ -96,28 +96,27 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
     // Helper to generate 15-min increment times starting from the next increment
     const generateTimeOptions = () => {
         const times: string[] = [];
-
-        //const now = new Date(); // 
-        const now = new Date("2025-05-05T16:30:00"); // Monday, 4:30 PM hardcoded for testing
-
-        let h = now.getHours();
-        let m = now.getMinutes();
-        // Find the next 15-min increment
-        m = m + (15 - (m % 15));
-        if (m === 60) {
-            m = 0;
-            h++;
-        }
-        // Generate times from the next increment to 23:45
-        for (let hour = h; hour < 24; hour++) {
-            for (let min = (hour === h ? m : 0); min < 60; min += 15) {
-                const hourStr = hour.toString().padStart(2, '0');
+    
+        const startHour = 6; // 6 AM
+        const endHour = 21; // 9 PM
+    
+        // Generate 15 minute increments from startHour until endHour
+        for (let hour = startHour; hour <= endHour; hour++) {
+            for (let min = 0; min < 60; min += 15) {
+                // Stop adding times if we reach 9:00 PM
+                if (hour === endHour && min > 0)
+                    break;
+                
+                //Convert to integer value to string, if PM subtract 12
+                const hourStr = hour > 12 ? (hour - 12).toString().padStart(2, '0') : hour.toString().padStart(2, '0');
                 const minStr = min.toString().padStart(2, '0');
-                times.push(`${hourStr}:${minStr}`);
+                const period = hour >= 12 ? 'PM' : 'AM'; // Determine AM/PM
+                times.push(`${hourStr}:${minStr} ${period}`);
             }
         }
         return times;
     };
+    
     const timeOptions = generateTimeOptions();
 
     // Helper to map building name to code
