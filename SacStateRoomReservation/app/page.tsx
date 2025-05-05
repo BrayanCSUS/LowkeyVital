@@ -1,3 +1,5 @@
+// app/page.tsx
+//home page
 "use client"
 import { useState } from "react"
 import Link from "next/link"
@@ -13,6 +15,7 @@ import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useEffect } from "react"
+import { useAuth } from "@/context/AuthContext"
 import { getAvailableRooms } from "../lib/roomUtils";
 import { Room } from "../lib/types";
 console.log(getAvailableRooms); // Should log the function definition
@@ -93,15 +96,21 @@ export default function HomePage() {
       setSearchTerm(building.name)
     }
   
-    // Handle click of the "Find Nearby Rooms" button.
+      // Update handleFindRooms: only allow if user is logged in.
+    const { user } = useAuth()
+
     const handleFindRooms = () => {
-      if (selectedBuilding) {
-        setShowRooms(true)
-      } else {
-        // Optionally, you could show an error message if no building is selected.
-        alert("Please select a building from the suggestions.")
-      }
+    if (!user) {
+      alert("Please sign in to reserve a room.")
+      return
     }
+    if (selectedBuilding) {
+      setShowRooms(true)
+    } else {
+      alert("Please select a building from the suggestions.")
+    }
+  }
+
 
     // Handle click of the "View Details" button for a room.
     const handleViewDetails = (room: Room) => {
@@ -128,7 +137,7 @@ return (
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-            <Sign_In_Button />
+          { !user && <Sign_In_Button /> }
           </div>
         </div>
       </header>
@@ -197,9 +206,15 @@ return (
                         <div>
                           <p className="text-xs text-gray-600">Room {room.roomNumber}</p>
                         </div>
-                        <Button variant="outline" size="sm" onClick={() => handleViewDetails(room)}>
-                          View Details
+                      {user ? (
+                          <Button variant="outline" size="sm" onClick={() => handleViewDetails(room)}>
+                            View Details
+                          </Button>
+                      ) : (
+                        <Button variant="outline" size="sm" disabled>
+                          Sign in to view details
                         </Button>
+                      )}
                       </div>
                     ))
                   ) : (
@@ -314,17 +329,23 @@ return (
                 </CardContent>
                 <CardFooter className="p-4 pt-2 flex justify-between">
                   <Button variant="outline">View Details</Button>
-                  <Button
-                    className="bg-[#00563F] hover:bg-[#00563F]/90"
-                    onClick={() => {
+                 <Button
+                   className="bg-[#00563F] hover:bg-[#00563F]/90"
+                   onClick={() => {
+                    if (!user) {
+                    alert("Please sign in to reserve a room.")
+                     } else {
+                    {
                       console.log("Selected Building:", building); // Log the selected building
                       setSelectedBuilding(building); // Set the selected building
-                      setShowNearbyRooms(true); // Open the NearbyRooms dialog
+                      setShowNearbyRooms(true)
+                  }
+          }; // Open the NearbyRooms dialog
                     }}
-                  >
-                    Find Rooms
-                  </Button>
-                </CardFooter>
+  >
+    Find Rooms
+  </Button>
+</CardFooter>
               </Card>
             ))}
           </div>
