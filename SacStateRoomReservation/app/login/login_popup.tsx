@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Popup from 'reactjs-popup';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { X } from "lucide-react";
 import 'reactjs-popup/dist/index.css';
 import '/styles/login_popup.css';
 import axios from 'axios';
 import { useAuth } from "@/context/AuthContext"; // Import useAuth
+import { toast } from "@/hooks/use-toast"; // Import toast notification
 
 interface LoginPopupProps {
     open: boolean;
@@ -24,7 +26,11 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
         if (email == "bypass") {
             setErrorMessage('');
             console.log('Bypass submitted');
+
             login( { email });
+
+            toast({ title: "Bypass login", description: "Logged in with bypass." }); // Show toast
+
             onClose();
         } else if (emailParts.length === 2 && emailParts[1] === 'csus.edu' && /^[a-zA-Z0-9]+$/.test(emailParts[0])) {
             setErrorMessage('');
@@ -35,6 +41,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
             try {
                 await axios.post('http://localhost:3001/send-email', { email });
                 console.log('Email sent successfully');
+                toast({ title: "Email Sent", description: "Check your CSUS email for a verification code." }); // Show toast
             } catch (error) {
                 console.error('Error sending email:', error);
                 setErrorMessage('Failed to send email. Please try again later.');
@@ -50,6 +57,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
             console.log(response.data.message);
             // On successful verification, update auth state:
             login({ email }); 
+            toast({ title: "Login Successful", description: "You are now logged in." }); // Show toast
             onClose(); // Close the popup if verification is successful
         } catch (error) {
             console.error('Error verifying code:', error);
@@ -74,15 +82,21 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
 
     return (
         <Popup open={open} onClose={handleClose} modal nested>
-            <div>
-                <Button onClick={handleClose} className='close-button'>
-                    X
+            <div className="flex justify-end">
+                <Button
+                    onClick={handleClose}
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Close"
+                    className="close-button p-1 hover:bg-[#c4b581] focus:outline-none"
+                >
+                    <X className="h-5 w-5 text-gray-400" />
                 </Button>
             </div>
             <div className='popup-content'>
                 {isEmailSubmitted ? (
                     <div>
-                        <div>Please check your inbox and enter the verification code</div>
+                        <div>Check your CSUS email for a verification code and enter it below.</div>
                         <Input
                             className="bg-white text-black"
                             style={{ paddingLeft: '0.5' }} // Remove left padding

@@ -101,7 +101,21 @@ export default function NearbyRooms({ selectedBuilding }: NearbyRoomsProps) {
                   </CardTitle>
                   <div className="flex items-center mt-1 text-sm">
                     <MapPin className="h-3 w-3 mr-1" />
-                    <span>{room.distance}</span> {/* Display room distance */}
+                    <span>{(() => {
+                      const floorMap = {
+                        '1': 'First',
+                        '2': 'Second',
+                        '3': 'Third',
+                        '4': 'Fourth',
+                        '5': 'Fifth',
+                        '6': 'Sixth',
+                        '7': 'Seventh',
+                        '8': 'Eighth',
+                        '9': 'Ninth'
+                      };
+                      const digit = room.roomNumber && /^[0-9]/.test(room.roomNumber) ? room.roomNumber[0] : '?';
+                      return floorMap[digit] ? `${floorMap[digit]} Floor` : `Floor ${digit}`;
+                    })()}</span>
                   </div>
                 </div>
                 <Badge className="bg-[#C4B581] text-[#00563F] hover:bg-[#C4B581]/90">Available</Badge>

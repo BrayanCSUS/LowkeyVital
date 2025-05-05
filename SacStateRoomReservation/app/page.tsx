@@ -60,6 +60,10 @@ export default function HomePage() {
     const [rooms, setRooms] = useState<Room[]>([])
     const [selectedRoomDetails, setSelectedRoomDetails] = useState<Room | null>(null);
 
+    // New state for alert dialog
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+
     // Helper to format time as 'h:mm AM/PM'
     function formatTime12hr(time: string) {
       if (!time) return "";
@@ -113,17 +117,18 @@ export default function HomePage() {
     const { user } = useAuth()
 
     const handleFindRooms = () => {
-    if (!user) {
-      alert("Please sign in to reserve a room.")
-      return
+      if (!user) {
+        setAlertMessage("Please sign in to reserve a room.");
+        setShowAlert(true);
+        return;
+      }
+      if (selectedBuilding) {
+        setShowRooms(true);
+      } else {
+        setAlertMessage("Please select a building from the suggestions.");
+        setShowAlert(true);
+      }
     }
-    if (selectedBuilding) {
-      setShowRooms(true)
-    } else {
-      alert("Please select a building from the suggestions.")
-    }
-  }
-
 
     // Handle click of the "View Details" button for a room.
     const handleViewDetails = (room: Room) => {
@@ -417,6 +422,18 @@ return (
           </div>
         </DialogContent>
       </Dialog>
+      {/* AlertDialog for alerts */}
+      <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Notice</AlertDialogTitle>
+            <AlertDialogDescription>{alertMessage}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setShowAlert(false)}>OK</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       {selectedRoomDetails && (
         <Dialog open={!!selectedRoomDetails} onOpenChange={() => setSelectedRoomDetails(null)}>
           <DialogContent>

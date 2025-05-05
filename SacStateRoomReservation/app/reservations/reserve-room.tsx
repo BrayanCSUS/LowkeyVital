@@ -96,7 +96,10 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
     // Helper to generate 15-min increment times starting from the next increment
     const generateTimeOptions = () => {
         const times: string[] = [];
-        const now = new Date();
+
+        //const now = new Date(); // 
+        const now = new Date("2025-05-05T16:30:00"); // Monday, 4:30 PM hardcoded for testing
+
         let h = now.getHours();
         let m = now.getMinutes();
         // Find the next 15-min increment
@@ -116,6 +119,18 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
         return times;
     };
     const timeOptions = generateTimeOptions();
+
+    // Helper to map building name to code
+    async function getBuildingCodeFromName(name: string): Promise<string | null> {
+        try {
+            const resp = await fetch("/data/buildings_data.json");
+            const data = await resp.json();
+            const found = data.find((b: { name: string }) => b.name === name);
+            return found ? found.code : null;
+        } catch {
+            return null;
+        }
+    }
 
     const getAvailableReservation = () => {
         for (const reservation of userReservations) { // Loop through userReservations
@@ -150,7 +165,7 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
         setPurpose(value); // Update the purpose state
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // Find the first available reservation object
         const current = getAvailableReservation();
 
@@ -188,6 +203,51 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
             setShowAlert(true);
             return;
         }
+
+        // --- New logic: Prevent reservation past available until time ---
+        try {
+            // Map building name to code if needed
+            let buildingCode = selectedRoom.building;
+            // If it's not a known code, try to map from name
+            if (buildingCode.length > 3) {
+                const mapped = await getBuildingCodeFromName(buildingCode);
+                if (!mapped) throw new Error("Could not map building name to code");
+                buildingCode = mapped;
+            }
+            const resp = await fetch("/data/room_availability.json");
+            const data = await resp.json();
+            const buildingRooms = data[buildingCode];
+            console.log("DEBUG: buildingCode:", buildingCode);
+            if (!buildingRooms) throw new Error("Building not found in data");
+            const roomData = buildingRooms[selectedRoom.room];
+            console.log("DEBUG: selectedRoom.room:", selectedRoom.room);
+            if (!roomData) throw new Error("Room not found in building");
+            // Get day of week from selected date
+            console.log("DEBUG: selected date:", date);
+            const dayOfWeek = date ? new Date(date + 'T00:00:00').toLocaleString("en-US", { weekday: "long" }) : "";
+            console.log("DEBUG: dayOfWeek:", dayOfWeek);
+            const slots = roomData[dayOfWeek];
+            console.log("DEBUG: slots:", slots);
+            if (!slots || !Array.isArray(slots)) throw new Error("No availability for this day");
+            // Find the slot that contains the start time
+            const slot = slots.find((s: { start: string, end: string }) => start >= s.start && start < s.end);
+            console.log("DEBUG: slot found:", slot);
+            if (!slot) {
+                setAlertMessage("Selected start time is not available for this room on that day.");
+                setShowAlert(true);
+                return;
+            }
+            if (end > slot.end) {
+                setAlertMessage(`Your end time needs to be before: ${formatTime12hr(slot.end)}. \nA class is scheduled for that time.`);
+                setShowAlert(true);
+                return;
+            }
+        } catch (e) {
+            setAlertMessage("Could not verify room availability. Please try again.");
+            setShowAlert(true);
+            return;
+        }
+        // --- End new logic ---
 
         // Update the current reservation object with user inputs
         current.building = building;
@@ -338,7 +398,11 @@ const ReserveRoom: React.FC<ReserveRoomProps> = ({ selectedRoom, open: controlle
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Notice</AlertDialogTitle>
-                        <AlertDialogDescription>{alertMessage}</AlertDialogDescription>
+                        <AlertDialogDescription>
+                            {alertMessage.split('\n').map((line, idx) => (
+                                <div key={idx}>{line}</div>
+                            ))}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogAction onClick={() => setShowAlert(false)}>OK</AlertDialogAction>
