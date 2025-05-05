@@ -183,7 +183,7 @@ return (
             <Link href="/reservations" className="text-sm font-medium hover:underline" onClick={myResRedirect}>
               My Reservations
             </Link>
-            <Alert isOpen={isAlertOpen} onClose={() => setAlertOpen(false)} description={ "e" }/>
+            <Alert isOpen={isAlertOpen} onClose={() => setAlertOpen(false)} description={ description }/>
             <Link href="/Help" className="text-sm font-medium hover:underline">
               Help
             </Link>
