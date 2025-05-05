@@ -132,6 +132,17 @@ export default function ReservationsPage() {
     const today = new Date();
     const tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
+    // If dateStr is in YYYY-MM-DD format, parse as local date
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+      const [year, month, day] = dateStr.split("-").map(Number);
+      const d = new Date(year, month - 1, day);
+      const isToday = d.toDateString() === today.toDateString();
+      const isTomorrow = d.toDateString() === tomorrow.toDateString();
+      if (isToday) return "Today";
+      if (isTomorrow) return "Tomorrow";
+      return d.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+    // Otherwise, try to parse as normal
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return dateStr; // fallback for invalid date
     const isToday = d.toDateString() === today.toDateString();
@@ -186,14 +197,19 @@ export default function ReservationsPage() {
 
   const isPast = (r: ReservationWithStatus): boolean => {
     if (!r.date) return false;
-    // Try to parse date in YYYY-MM-DD or other formats
-    const d = new Date(r.date);
-    // If the date is invalid, treat as upcoming
+    let d: Date;
+    // If date is in YYYY-MM-DD format, add 1 to the day (to match display logic)
+    if (/^\d{4}-\d{2}-\d{2}$/.test(r.date)) {
+      const [year, month, day] = r.date.split("-").map(Number);
+      d = new Date(year, month - 1, day + 1);
+    } else {
+      d = new Date(r.date);
+    }
     if (isNaN(d.getTime())) return false;
-    // If the date is today or in the future, it's upcoming
     d.setHours(23, 59, 59, 999);
     return d < now;
   };
+
   const upcoming = allReservations.filter(r => r.status === "upcoming" && !isPast(r))
   const past = allReservations.filter(r => r.status === "completed" || (r.status !== "canceled" && isPast(r)))
   const canceled = allReservations.filter(r => r.status === "canceled")
