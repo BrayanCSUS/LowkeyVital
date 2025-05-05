@@ -39,8 +39,8 @@ interface Building {
   code: string; // code like "LIB"
   type: "academic" | "student";
   floors: number;
-  rooms: number;
-  availableRooms: number;
+  totalRooms: number;
+  //availableRooms: number; // No implementation yet
   hours: string;
   features: string[];
   image: string;
