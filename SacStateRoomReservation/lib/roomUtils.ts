@@ -62,7 +62,7 @@ async function getRoomsForBuilding(selectedBuilding: { code: string; name: strin
           console.log("Checking time range:", timeRange);
           const matches =
             (!timeRange.start || currentTime >= timeRange.start) &&
-            currentTime <= timeRange.end;
+            currentTime < timeRange.end;
   
           if (matches) {
             availableUntil = timeRange.end; // Update availableUntil with the end time
@@ -92,8 +92,8 @@ async function getRoomsForBuilding(selectedBuilding: { code: string; name: strin
   
   // Main function to fetch and filter rooms
   export async function getAvailableRooms(selectedBuilding: { code: string; name: string }) {
-    const currentDay = "Thursday"; // Hardcoded for testing purposes
-    const currentTime = "08:00"; // Hardcoded time for testing purposes
+    const currentDay = "Monday"; // Hardcoded for testing purposes
+    const currentTime = "16:30"; // Hardcoded time for testing purposes
 
     //const currentDay = new Date().toLocaleString("en-US", { weekday: "long" }); // e.g., "Monday"
     //const currentTime = new Date().toTimeString().slice(0, 5); // Format: "HH:MM"
