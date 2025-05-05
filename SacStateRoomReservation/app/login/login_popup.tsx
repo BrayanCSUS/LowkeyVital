@@ -113,6 +113,8 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
                     <div>
                         <div>Check your CSUS email for a verification code and enter it below.</div>
                         <Input
+                            id="verification-code"
+                            name="verification-code"
                             ref={codeInputRef}
                             className="bg-white text-black"
                             style={{ paddingLeft: '0.5' }} // Remove left padding
