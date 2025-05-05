@@ -398,7 +398,9 @@ return (
       <Dialog open={showNearbyRooms} onOpenChange={setShowNearbyRooms}>
         <DialogContent className="max-w-2xl w-full">
           <DialogTitle>Nearby Rooms</DialogTitle>
-          <NearbyRooms selectedBuilding={selectedBuilding} />
+          <div className="max-h-[75vh] overflow-y-auto p-2">
+            <NearbyRooms selectedBuilding={selectedBuilding} />
+          </div>
         </DialogContent>
       </Dialog>
       {selectedRoomDetails && (
