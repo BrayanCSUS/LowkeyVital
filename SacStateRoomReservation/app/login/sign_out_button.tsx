@@ -3,6 +3,7 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from "@/components/ui/button";
+import { toast } from "@/hooks/use-toast";
 
 const SignOutButton: React.FC = () => {
     const { user, logout } = useAuth(); // Get user and logout function from context
@@ -12,6 +13,10 @@ const SignOutButton: React.FC = () => {
         if (window.location.pathname === '/reservations')
             window.location.href = '/'; // Redirect to the root of the home page
         
+        toast({ title: "Log Out Successful",
+                description: "You are now logged out.",
+                duration: 10000,
+        });
         logout();
     };
 
