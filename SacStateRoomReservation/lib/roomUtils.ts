@@ -1,3 +1,5 @@
+import roomCapacities from "../public/data/room_capacities.json";
+
 // Fetch the list of rooms for the selected building
 async function getRoomsForBuilding(selectedBuilding: { code: string; name: string }) {
     if (!selectedBuilding) {
@@ -23,13 +25,16 @@ async function getRoomsForBuilding(selectedBuilding: { code: string; name: strin
   }
   
   // Get room details
-  function getRoomDetails(roomData: any, roomNumber: string, buildingName: string) {
+  function getRoomDetails(roomData: any, roomNumber: string, buildingName: string, buildingCode: string) {
+    // Check if the room capacity exists in room_capacities.json
+    const capacity = roomCapacities[buildingCode]?.[roomNumber] || "Unknown";
+
     return {
       id: roomData.id || Math.random(),
       building: buildingName,
       roomNumber,
       distance: roomData.distance || "Unknown distance",
-      capacity: roomData.capacity || 30,
+      capacity, // Use the capacity from room_capacities.json if available, otherwise "Unknown"
       features: roomData.features || ["No features available"],
     };
   }
@@ -39,7 +44,7 @@ async function getRoomsForBuilding(selectedBuilding: { code: string; name: strin
     buildingRooms: any,
     currentDay: string,
     currentTime: string,
-    selectedBuilding: { name: string }
+    selectedBuilding: { name: string; code: string }
   ) {
     const roomList = Object.keys(buildingRooms)
       .map((roomNumber) => {
@@ -77,7 +82,7 @@ async function getRoomsForBuilding(selectedBuilding: { code: string; name: strin
         if (!isAvailable) return null;
   
         // Combine room details with availability
-        const roomDetails = getRoomDetails(roomData, roomNumber, selectedBuilding.name);
+        const roomDetails = getRoomDetails(roomData, roomNumber, selectedBuilding.name, selectedBuilding.code);
         return {
           ...roomDetails,
           availableUntil, // Add availability-specific property
