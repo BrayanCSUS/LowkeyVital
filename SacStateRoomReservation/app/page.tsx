@@ -13,10 +13,12 @@ import RoomMap from "@/components/room-map"
 import NearbyRooms from "@/components/nearby-rooms"
 import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
-
+import { getAvailableRooms } from "../lib/roomUtils";
+import { Room } from "../lib/types";
+console.log(getAvailableRooms); // Should log the function definition
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,7 +30,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-
 
 // Building interface to define the structure of building data.
 interface Building {
@@ -44,25 +45,32 @@ interface Building {
   image: string;
 }
 
-// Sample rooms for demonstration purposes.
-// In your real app each building might have its own room list.
-const sampleRooms = [
-  { id: 1, roomNumber: "101", name: "Room 101" },
-  { id: 2, roomNumber: "102", name: "Room 102" },
-  { id: 3, roomNumber: "103", name: "Room 103" },
-]
-
 export default function HomePage() {
     // New state for search, selected building, and whether to show rooms list.
     const [searchTerm, setSearchTerm] = useState("")
     const [selectedBuilding, setSelectedBuilding] =  useState<Building | null>(null)
     const [showRooms, setShowRooms] = useState(false)
     const [showNearbyRooms, setShowNearbyRooms] = useState(false)
-
-    // State and Fetch for buildings data.
     const [buildings, setBuildings] = useState<Building[]>([]);
     // New state for selected tab
     const [selectedTab, setSelectedTab] = useState<string>("all");
+
+    // New state for rooms and selected room details
+    const [rooms, setRooms] = useState<Room[]>([])
+    const [selectedRoomDetails, setSelectedRoomDetails] = useState<Room | null>(null);
+
+    // Helper to format time as 'h:mm AM/PM'
+    function formatTime12hr(time: string) {
+      if (!time) return "";
+      if (time.match(/AM|PM/i)) return time;
+      const [h, m] = time.split(":");
+      if (h === undefined || m === undefined) return time;
+      const date = new Date();
+      date.setHours(Number(h));
+      date.setMinutes(Number(m));
+      return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
+    }
+
     // Fetch buildings data from JSON file on component mount.
     useEffect(() => {
       fetch("/data/buildings_data.json")
@@ -71,6 +79,18 @@ export default function HomePage() {
         .catch((err) => console.error("Failed to load buildings:", err));
     }, []);
   
+    // Fetch room data based on the selected building's code.
+    useEffect(() => {
+      if (!selectedBuilding) return;
+      console.log("Selected Building:", selectedBuilding.code);
+      getAvailableRooms(selectedBuilding)
+        .then((roomList) => {
+          console.log("Room List:", roomList);
+          setRooms(roomList);
+        })
+        .catch((err) => console.error("Error fetching rooms:", err));
+    }, [selectedBuilding]);
+
     // Filter building suggestions based on typed text and selected tab.
     const filteredBuildings = buildings.filter((b) => {
       const matchesSearch = b.name?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -83,6 +103,7 @@ export default function HomePage() {
   
     // Handle selecting a building suggestion.
     const handleSelectBuilding = (building: Building) => {
+      console.log("Selected Building:", building);
       setSelectedBuilding(building)
       setSearchTerm(building.name)
     }
@@ -102,11 +123,11 @@ export default function HomePage() {
     }
   }
 
-    const sampleRooms = [
-      { id: 1, roomNumber: "101", name: "Room 101" },
-      { id: 2, roomNumber: "102", name: "Room 102" },
-      { id: 3, roomNumber: "103", name: "Room 103" },
-    ]
+
+    // Handle click of the "View Details" button for a room.
+    const handleViewDetails = (room: Room) => {
+      setSelectedRoomDetails(room);
+    };
   
 return (
     <div className="flex min-h-screen flex-col">
@@ -188,26 +209,29 @@ return (
                   <h2 className="mb-2 text-lg font-bold">
                     Rooms in {selectedBuilding.name}
                   </h2>
-                  {sampleRooms.map((room) => (
-                    <div
-                      key={room.id}
-                      className="flex items-center justify-between border-b py-2 last:border-0"
-                    >
-                      <div>
-                        <p className="font-medium">{room.name}</p>
-                        <p className="text-xs text-gray-600">Room {room.roomNumber}</p>
-                      </div>
+                  {rooms.length > 0 ? (
+                    rooms.map((room) => (
+                      <div
+                        key={room.id}
+                        className="flex items-center justify-between border-b py-2 last:border-0"
+                      >
+                        <div>
+                          <p className="text-xs text-gray-600">Room {room.roomNumber}</p>
+                        </div>
                       {user ? (
-                        <Button variant="outline" size="sm">
-                          View Details
-                        </Button>
+                          <Button variant="outline" size="sm" onClick={() => handleViewDetails(room)}>
+                            View Details
+                          </Button>
                       ) : (
                         <Button variant="outline" size="sm" disabled>
                           Sign in to view details
                         </Button>
                       )}
-                    </div>
-                  ))}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-600">No rooms available for this building.</p>
+                  )}
                 </div>
               )}
             </div>
@@ -323,9 +347,13 @@ return (
                     if (!user) {
                     alert("Please sign in to reserve a room.")
                      } else {
-                    setShowNearbyRooms(true)
+                    {
+                      console.log("Selected Building:", building); // Log the selected building
+                      setSelectedBuilding(building); // Set the selected building
+                      setShowNearbyRooms(true)
                   }
-          }}
+          }; // Open the NearbyRooms dialog
+                    }}
   >
     Find Rooms
   </Button>
@@ -381,9 +409,29 @@ return (
       </main>
       <Dialog open={showNearbyRooms} onOpenChange={setShowNearbyRooms}>
         <DialogContent className="max-w-2xl w-full">
-          <NearbyRooms />
+          <DialogTitle>Nearby Rooms</DialogTitle>
+          <div className="max-h-[75vh] overflow-y-auto p-2">
+            <NearbyRooms selectedBuilding={selectedBuilding} />
+          </div>
         </DialogContent>
       </Dialog>
+      {selectedRoomDetails && (
+        <Dialog open={!!selectedRoomDetails} onOpenChange={() => setSelectedRoomDetails(null)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Room Details</DialogTitle>
+              <DialogDescription>
+                <p><strong>Room Number:</strong> {selectedRoomDetails.roomNumber}</p>
+                <p><strong>Building:</strong> {selectedRoomDetails.building}</p>
+                <p><strong>Distance:</strong> {selectedRoomDetails.distance}</p>
+                <p><strong>Capacity:</strong> {selectedRoomDetails.capacity}</p>
+                <p><strong>Features:</strong> {selectedRoomDetails.features.join(", ")}</p>
+                <p><strong>Available Until:</strong> {formatTime12hr(selectedRoomDetails.availableUntil)}</p>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      )}
       <footer className="border-t bg-[#00563F] text-white py-6">
         <div className="container px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">

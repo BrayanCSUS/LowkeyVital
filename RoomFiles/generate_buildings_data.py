@@ -7,10 +7,10 @@ df = pd.read_csv('class_schedule_clean.csv')
 # Generate building data for frontend
 def generate_building_data(df):
     # Drop duplicates to ensure one name per building
-    building_names = df[['building', 'building_name']].drop_duplicates().set_index('building')
+    building_names = df[['code', 'building']].drop_duplicates().set_index('code')
 
     # Count unique rooms per building
-    grouped = df.groupby("building").agg(
+    grouped = df.groupby("code").agg(
         rooms=('room', lambda x: len(set(x)))
     ).reset_index()
 
@@ -26,13 +26,13 @@ def generate_building_data(df):
 
 
     # Add building names from the CSV
-    grouped["name"] = grouped["building"].map(building_names["building_name"])
+    grouped["name"] = grouped["code"].map(building_names["building"])
     grouped["id"] = range(1, len(grouped) + 1)
     grouped["floors"] = 3   # Filler data, no data in CSV
     grouped["availableRooms"] = 0  # Optional: can be filled from logic
     grouped["hours"] = "7:00 AM - 10:00 PM" # Filler data, no data in CSV
     grouped["features"] = [["Classrooms"]] * len(grouped)
-    grouped["image"] = grouped["building"].apply(get_image_path)
+    grouped["image"] = grouped["code"].apply(get_image_path)
 
     return grouped.to_dict(orient="records")
 
