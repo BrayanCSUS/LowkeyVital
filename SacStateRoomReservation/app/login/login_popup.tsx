@@ -54,12 +54,12 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
         } else if (emailParts.length === 2 && emailParts[1] === 'csus.edu' && /[a-z0-9]+$/.test(emailParts[0])) {
             setErrorMessage('');
             console.log('Valid email submitted:', email);
-            setIsEmailSubmitted(true);
 
             // Send email to backend
             try {
                 await axios.post('http://localhost:3001/send-email', { email });
                 console.log('Email sent successfully');
+                setIsEmailSubmitted(true);
                 toast({ title: "Email Sent",
                         description: "Check your CSUS email for a verification code.",
                         duration: 10000,
