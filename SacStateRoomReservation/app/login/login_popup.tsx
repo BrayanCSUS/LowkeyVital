@@ -23,10 +23,14 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ open, onClose }) => {
 
     const handleSubmit = async () => {
         const emailParts = email.split('@');
-        if (email === "bypass") {
+        if (email == "bypass") {
             setErrorMessage('');
             console.log('Bypass submitted');
+
+            login( { email });
+
             toast({ title: "Bypass login", description: "Logged in with bypass." }); // Show toast
+
             onClose();
         } else if (emailParts.length === 2 && emailParts[1] === 'csus.edu' && /^[a-zA-Z0-9]+$/.test(emailParts[0])) {
             setErrorMessage('');

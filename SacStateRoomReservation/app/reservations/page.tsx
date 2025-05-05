@@ -23,6 +23,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import Sign_In_Button from "../login/sign_in_button"
 import ReserveRoom from "./reserve-room"
+import SignOutButton from '../login/sign_out_button'
 
 // Sample data for reservations
 const upcomingReservations = [
@@ -227,7 +228,8 @@ export default function ReservationsPage() {
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-            { !user && <Sign_In_Button /> }
+            <Sign_In_Button/>
+            <SignOutButton/>
           </div>
         </div>
       </header>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { HelpCircle, Info, Search, MapPin, Mail, Phone, User } from "lucide-react"
 import Sign_In_Button from "../login/sign_in_button"
 import { useAuth } from "@/context/AuthContext"
+import SignOutButton from '../login/sign_out_button'
 
 export default function HelpPage() {
   const { user } = useAuth();
@@ -23,7 +24,8 @@ export default function HelpPage() {
             <Link href="/Help" className="text-sm font-medium hover:underline">Help</Link>
           </nav>
           <div className="flex items-center gap-4">
-          { !user && <Sign_In_Button /> }
+            <Sign_In_Button/> 
+            <SignOutButton/>
           </div>
         </div>
       </header>

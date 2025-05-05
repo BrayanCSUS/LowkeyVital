@@ -13,6 +13,7 @@ import RoomMap from "@/components/room-map"
 import NearbyRooms from "@/components/nearby-rooms"
 import RecentReservations from "@/components/recent-reservations"
 import Sign_In_Button from "./login/sign_in_button"
+import SignOutButton from './login/sign_out_button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
@@ -154,7 +155,8 @@ return (
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-          { !user && <Sign_In_Button /> }
+            <Sign_In_Button/>
+            <SignOutButton/>
           </div>
         </div>
       </header>
