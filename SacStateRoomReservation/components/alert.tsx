@@ -12,7 +12,7 @@ import {
     AlertDialogCancel
 } from '@/components/ui/alert-dialog';
 
-export const LoginAlert = ({ isOpen, onClose }) => {
+export const Alert = ({ isOpen, onClose, description }) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogPortal>
@@ -21,7 +21,7 @@ export const LoginAlert = ({ isOpen, onClose }) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Alert</AlertDialogTitle>
             <AlertDialogDescription>
-              Please log in to continue.
+              { description }
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
