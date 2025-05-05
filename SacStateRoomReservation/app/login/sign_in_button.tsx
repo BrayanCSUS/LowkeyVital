@@ -12,7 +12,7 @@ const SignInButton = () => {
         setIsOpen(true); 
     };
 
-     // Close the popup
+    // Close the popup
     const closePopup = () => {
         setIsOpen(false);
     };
@@ -22,7 +22,7 @@ const SignInButton = () => {
             <Button onClick={handleClick} variant="outline" className="text-[#00563F] hover:bg-white hover:text-[#00563F]">
                 Sign In
             </Button>
-            <LoginPopup open={isOpen} onClose={closePopup} /> {}
+            <LoginPopup open={isOpen} onClose={closePopup} /> {/* Show popup if open */}
         </div>
     );
 };
