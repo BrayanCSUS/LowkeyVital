@@ -67,7 +67,7 @@ export default function ContactPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground space-y-1">
-                <p>(123) 456-7890</p>
+                <p>(916) 316-8506</p>
                 <p>Mon–Fri, 9:00 AM – 5:00 PM</p>
               </CardContent>
             </Card>
@@ -81,9 +81,9 @@ export default function ContactPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground space-y-1">
-                <p>Non-specific Company</p>
-                <p>123 Business Road, Suite 100</p>
-                <p>City, State, ZIP Code</p>
+                <p>LowkeyVital</p>
+                <p>6000 J Street</p>
+                <p>Sacramento, CA, 95817</p>
               </CardContent>
             </Card>
           </div>

@@ -119,10 +119,10 @@ export default function TermsPage() {
             <p className="text-sm text-muted-foreground mb-2">
               Questions? Email us at{" "}
               <Link
-                href="mailto:Sean@shawnosphere.com"
+                href="mailto:support@roomfinder.com"
                 className="text-[#00563F] hover:underline"
               >
-                Sean@shawnosphere.com
+                support@roomfinder.com
               </Link>
             </p>
           </div>

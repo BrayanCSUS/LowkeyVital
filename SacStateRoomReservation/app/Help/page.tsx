@@ -129,7 +129,7 @@ export default function HelpPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-muted-foreground">
-                  support@sacstatefinder.edu
+                  support@sacstatefinder.com
                 </CardContent>
               </Card>
               <Card>
@@ -140,7 +140,7 @@ export default function HelpPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-muted-foreground">
-                  (916) 123-4567 — Monday to Friday, 9 AM – 5 PM
+                  (916) 316-8506 — Monday to Friday, 9 AM – 5 PM
                 </CardContent>
               </Card>
             </div>

@@ -114,10 +114,10 @@ export default function PrivacyPage() {
             <p className="text-sm text-muted-foreground mb-2">
               Questions? Email us at{" "}
               <Link
-                href="mailto:support@roomfinder.book"
+                href="mailto:support@roomfinder.com"
                 className="text-[#00563F] hover:underline"
               >
-                support@roomfinder.book
+                support@roomfinder.com
               </Link>
             </p>
           </div>
