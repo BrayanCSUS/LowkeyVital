@@ -69,10 +69,7 @@ export default function RecentReservations() {
                 </div>
               </CardContent>
               <CardFooter className="p-4 pt-2 flex justify-end gap-2">
-                <Button variant="outline" size="sm">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  Directions
-                </Button>
+                
                 {reservation.status === "upcoming" && (
                   <Button variant="destructive" size="sm">
                     Cancel
