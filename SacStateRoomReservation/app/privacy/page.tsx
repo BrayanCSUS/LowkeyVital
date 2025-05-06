@@ -1,89 +1,140 @@
-import React from "react";
+"use client"
 
-const PrivacyPolicy = () => {
+import Link from "next/link"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Shield } from "lucide-react"
+import Sign_In_Button from "../login/sign_in_button"
+
+export default function PrivacyPage() {
   return (
-    <div className="max-w-4xl mx-auto p-6 text-gray-800">
-      <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
+    <div className="flex min-h-screen flex-col">
+      {/* Header */}
+      <header className="sticky top-0 z-10 border-b bg-[#00563F] text-white">
+        <div className="container flex h-16 items-center justify-between px-4">
+          <div className="flex items-center gap-2 font-bold">
+            <Shield className="h-5 w-5" />
+            <span>Privacy Policy</span>
+          </div>
+          <nav className="hidden md:flex items-center gap-6">
+            <Link href="/" className="text-sm font-medium hover:underline">Home</Link>
+            <Link href="/reservations" className="text-sm font-medium hover:underline">My Reservations</Link>
+            <Link href="/Help" className="text-sm font-medium hover:underline">Help</Link>
+          </nav>
+          <div className="flex items-center gap-4">
+            <Sign_In_Button />
+          </div>
+        </div>
+      </header>
 
-      <p className="mb-4">Effective Date: May 3, 2025</p>
+      {/* Main Content */}
+      <main className="flex-1 py-12">
+        <div className="container px-4 space-y-8">
+          <p className="text-sm text-muted-foreground">Effective Date: May 3, 2025</p>
 
-      <p className="mb-4">
-        Welcome to Room finder! We value your privacy and are committed to
-        protecting your personal information. This Privacy Policy explains how
-        we collect, use, and protect your data when you use our services.
-      </p>
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>1. Information We Collect</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                <ul className="list-disc pl-5 mt-2 space-y-1">
+                  <li><strong>Personal Information:</strong> Your name, email address, and contact details when you sign up or contact us.</li>
+                  <li><strong>Usage Data:</strong> Your IP address, browser type, device info, and activity on our platform.</li>
+                  <li><strong>Cookies:</strong> Small data files used to improve your experience and analyze site usage.</li>
+                </ul>
+              </CardContent>
+            </Card>
 
-      <h2 className="text-2xl font-semibold mt-6 mb-2">1. Information We Collect</h2>
-      <ul className="list-disc list-inside mb-4">
-        <li>
-          <strong>Personal Information:</strong> such as your name, email
-          address, and contact details when you sign up or contact us.
-        </li>
-        <li>
-          <strong>Usage Data:</strong> including your IP address, browser type,
-          device information, and activity on our platform.
-        </li>
-        <li>
-          <strong>Cookies:</strong> small data files used to improve your
-          experience and analyze site usage.
-        </li>
-      </ul>
+            <Card>
+              <CardHeader>
+                <CardTitle>2. How We Use Your Information</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                <ul className="list-disc pl-5 mt-2 space-y-1">
+                  <li>Provide and improve our services</li>
+                  <li>Communicate updates and promotional messages</li>
+                  <li>Ensure the security and integrity of our platform</li>
+                  <li>Comply with legal obligations</li>
+                </ul>
+              </CardContent>
+            </Card>
 
-      <h2 className="text-2xl font-semibold mt-6 mb-2">2. How We Use Your Information</h2>
-      <ul className="list-disc list-inside mb-4">
-        <li>Provide and improve our services</li>
-        <li>Communicate with you (including updates and promotional messages)</li>
-        <li>Ensure the security and integrity of our platform</li>
-        <li>Comply with legal obligations</li>
-      </ul>
+            <Card>
+              <CardHeader>
+                <CardTitle>3. Sharing Your Information</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                We do <strong>not</strong> sell your personal data. We may share info with trusted third parties under strict confidentiality, and disclose when required by law.
+              </CardContent>
+            </Card>
 
-      <h2 className="text-2xl font-semibold mt-6 mb-2">3. Sharing Your Information</h2>
-      <p className="mb-4">
-        We do <strong>not</strong> sell your personal data. We may share your
-        information with trusted third parties who help us operate our service,
-        but only under strict confidentiality agreements. We may also disclose
-        information when required by law.
-      </p>
+            <Card>
+              <CardHeader>
+                <CardTitle>4. Your Choices</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                <ul className="list-disc pl-5 mt-2 space-y-1">
+                  <li>Opt out of marketing communications at any time</li>
+                  <li>Disable cookies in your browser settings</li>
+                  <li>Request access, correction, or deletion of your personal data</li>
+                </ul>
+              </CardContent>
+            </Card>
 
-      <h2 className="text-2xl font-semibold mt-6 mb-2">4. Your Choices</h2>
-      <ul className="list-disc list-inside mb-4">
-        <li>Opt out of marketing communications at any time</li>
-        <li>Disable cookies in your browser settings</li>
-        <li>Request access, correction, or deletion of your personal data</li>
-      </ul>
+            <Card>
+              <CardHeader>
+                <CardTitle>5. Security</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                We use industry-standard security measures to protect your information. However, no transmission or storage method is 100% secure.
+              </CardContent>
+            </Card>
 
-      <h2 className="text-2xl font-semibold mt-6 mb-2">5. Security</h2>
-      <p className="mb-4">
-        We use industry-standard security measures to protect your information.
-        However, no method of transmission or storage is 100% secure, so we
-        cannot guarantee absolute security.
-      </p>
+            <Card>
+              <CardHeader>
+                <CardTitle>6. Children’s Privacy</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                Our services aren’t intended for individuals under 13. We do not knowingly collect data from children.
+              </CardContent>
+            </Card>
 
-      <h2 className="text-2xl font-semibold mt-6 mb-2">6. Children’s Privacy</h2>
-      <p className="mb-4">
-        Our services are not intended for individuals under the age of 13. We do
-        not knowingly collect data from children.
-      </p>
+            <Card>
+              <CardHeader>
+                <CardTitle>7. Changes to This Policy</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                We may update this Privacy Policy periodically. Significant changes will be communicated via email or through our service.
+              </CardContent>
+            </Card>
+          </div>
 
-      <h2 className="text-2xl font-semibold mt-6 mb-2">7. Changes to This Policy</h2>
-      <p className="mb-4">
-        We may update this Privacy Policy from time to time. If we make
-        significant changes, we’ll notify you by email or through our service.
-      </p>
+          {/* Contact */}
+          <div className="mt-10 text-center">
+            <p className="text-sm text-muted-foreground mb-2">
+              Questions? Email us at{" "}
+              <Link
+                href="mailto:support@roomfinder.book"
+                className="text-[#00563F] hover:underline"
+              >
+                support@roomfinder.book
+              </Link>
+            </p>
+          </div>
+        </div>
+      </main>
 
-      <h2 className="text-2xl font-semibold mt-6 mb-2">8. Contact Us</h2>
-      <p className="mb-4">
-        If you have any questions or concerns, please contact us at:
-        <br />
-        <a
-          href="mailto:Sean@shawnosphere.com"
-          className="text-blue-600 underline"
-        >
-          support@roomfinder.book
-        </a>
-      </p>
+      {/* Footer */}
+      <footer className="border-t bg-[#00563F] text-white py-6">
+        <div className="container px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm">© 2025 Team Lowkey Vital. All rights reserved.</p>
+          <nav className="flex items-center gap-4 text-xs">
+            <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
+            <Link href="/terms" className="hover:underline">Terms of Service</Link>
+            <Link href="/contact" className="hover:underline">Contact</Link>
+          </nav>
+        </div>
+      </footer>
     </div>
-  );
-};
-
-export default PrivacyPolicy;
+  )
+}
